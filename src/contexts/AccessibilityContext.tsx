@@ -15,22 +15,36 @@ const AccessibilityContext = createContext<AccessibilityContextType | undefined>
 
 export const AccessibilityProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [highContrast, setHighContrast] = useState<boolean>(() => {
-    return localStorage.getItem('accessibility-contrast') === 'true';
+    try {
+      return localStorage.getItem('accessibility-contrast') === 'true';
+    } catch (e) {
+      return false;
+    }
   });
 
   const [textScale, setTextScaleState] = useState<TextScale>(() => {
-    return (localStorage.getItem('accessibility-scale') as TextScale) || 'normal';
+    try {
+      return (localStorage.getItem('accessibility-scale') as TextScale) || 'normal';
+    } catch (e) {
+      return 'normal';
+    }
   });
 
   const [reducedMotion, setReducedMotion] = useState<boolean>(() => {
-    return localStorage.getItem('accessibility-motion') === 'true';
+    try {
+      return localStorage.getItem('accessibility-motion') === 'true';
+    } catch (e) {
+      return false;
+    }
   });
 
   // Toggle High Contrast
   const toggleHighContrast = () => {
     setHighContrast(prev => {
       const next = !prev;
-      localStorage.setItem('accessibility-contrast', String(next));
+      try {
+        localStorage.setItem('accessibility-contrast', String(next));
+      } catch (e) {}
       return next;
     });
   };
@@ -38,14 +52,18 @@ export const AccessibilityProvider: React.FC<{ children: ReactNode }> = ({ child
   // Set Text Scale
   const setTextScale = (scale: TextScale) => {
     setTextScaleState(scale);
-    localStorage.setItem('accessibility-scale', scale);
+    try {
+      localStorage.setItem('accessibility-scale', scale);
+    } catch (e) {}
   };
 
   // Toggle Reduced Motion
   const toggleReducedMotion = () => {
     setReducedMotion(prev => {
       const next = !prev;
-      localStorage.setItem('accessibility-motion', String(next));
+      try {
+        localStorage.setItem('accessibility-motion', String(next));
+      } catch (e) {}
       return next;
     });
   };
