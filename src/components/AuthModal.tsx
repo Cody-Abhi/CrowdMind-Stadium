@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth, UserRole } from '../contexts/AuthContext';
 import { 
@@ -32,6 +32,27 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [selectedRole, setSelectedRole] = useState<UserRole>('fan');
   const [loading, setLoading] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
+
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Close on Escape key press, and handle focus trapping
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Focus close button on open
+    setTimeout(() => {
+      closeButtonRef.current?.focus();
+    }, 50);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -100,6 +121,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         >
           {/* Close trigger button */}
           <button 
+            ref={closeButtonRef}
             onClick={onClose}
             className="absolute top-4 right-4 p-1.5 rounded-lg text-void-400 hover:text-white hover:bg-void-750 transition-colors"
             aria-label="Close authentication dialog"
