@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    function isStaff() {
+      return isSignedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['ops', 'volunteer', 'admin'];
+    }
+
+    // User profiles
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() || (isSignedIn() && request.auth.uid == userId);
+    }
+
+    // Safety Broadcasts & Messaging
+    match /safety_broadcasts/{broadcastId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+    
+    match /messaging_alerts/{alertId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // Stadium Gates Ingress Flow
+    match /stadium_gates/{gateId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // Volunteer & Dispatch Tasks
+    match /volunteer_tasks/{taskId} {
+      allow read: if true;
+      allow create, update: if isSignedIn();
+      allow delete: if isAdmin();
+    }
+
+    // Cloud Storage Simulator Metadata Catalog
+    match /cloud_storage_metadata/{fileId} {
+      allow read: if isSignedIn();
+      allow write: if isStaff();
+    }
+
+    // Telemetry and Analytics Logs
+    match /analytics_events/{eventId} {
+      allow read: if isStaff();
+      allow create: if true;
+    }
+
+    // Remote Settings Config
+    match /remote_config/{configId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

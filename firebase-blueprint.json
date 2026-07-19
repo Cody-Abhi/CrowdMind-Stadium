@@ -1,0 +1,39 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Extended user profile data",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string", "enum": ["fan", "ops", "volunteer", "admin"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "role"]
+    },
+    "SafetyBroadcast": {
+      "title": "Safety Broadcast",
+      "description": "Localized security alerts",
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "type": { "type": "string", "enum": ["critical", "warning", "info"] },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "active": { "type": "boolean" }
+      },
+      "required": ["text", "type"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User account data"
+    },
+    "/safety_broadcasts/{broadcastId}": {
+      "schema": "SafetyBroadcast",
+      "description": "Live alerts feed"
+    }
+  }
+}

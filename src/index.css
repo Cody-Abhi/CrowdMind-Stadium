@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* LUSAIL VOID CORE PALETTE - DEEPER & RICHER */
+  --color-void-950: #010204;
+  --color-void-900: #040712;
+  --color-void-850: #080b18;
+  --color-void-800: #0d1226;
+  --color-void-750: #121935;
+  --color-void-700: #1a2347;
+  --color-void-600: #253166;
+  --color-void-500: #3b4c91;
+  --color-void-400: #6274b5;
+  --color-void-200: #a3b1e0;
+  --color-void-50: #f8fafc;
+
+  /* NEON ENGINE - GLOW & VIBRANCY */
+  --color-neon-blue-500: #0066ff;
+  --color-neon-blue-400: #3b82f6;
+  --color-neon-blue-600: #004ecc;
+  --color-neon-cyan-500: #00f2ff;
+  --color-neon-cyan-400: #33f5ff;
+  --color-neon-purple-500: #8b5cf6;
+  --color-neon-purple-400: #a78bfa;
+  --color-neon-magenta-500: #f472b6;
+
+  /* DEPTH & MOTION - STRIPE/LINEAR STYLE */
+  --shadow-neon-blue: 0 0 30px -10px rgba(0, 102, 255, 0.4);
+  --shadow-neon-cyan: 0 0 30px -10px rgba(0, 242, 255, 0.4);
+  --shadow-glass-heavy: 0 20px 50px -12px rgba(0, 0, 0, 0.7);
+  --shadow-glass-border: inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+
+  @keyframes pulse-neon {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    50% { opacity: 0.8; filter: brightness(1.2); }
+  }
+
+  @keyframes scan-y {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-void-950 text-void-50 font-sans selection:bg-neon-blue-500/30 antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight text-white;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-void-900/60 backdrop-blur-2xl border border-void-700/20 shadow-glass-heavy;
+  }
+
+  .glass-card {
+    @apply bg-void-850/40 backdrop-blur-xl border border-white/5 rounded-2xl p-6 transition-all duration-500 ease-out shadow-glass-border;
+  }
+
+  .glass-card-hover {
+    @apply hover:bg-void-800/50 hover:border-neon-blue-500/20 hover:shadow-neon-blue hover:-translate-y-1;
+  }
+
+  .cyber-button {
+    @apply relative px-6 py-3 rounded-xl font-display font-bold text-sm transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden flex items-center justify-center gap-2;
+  }
+
+  .cyber-button-primary {
+    @apply bg-gradient-to-br from-neon-blue-600 to-neon-blue-500 text-white shadow-neon-blue hover:from-neon-blue-500 hover:to-neon-blue-400;
+  }
+
+  .cyber-button-outline {
+    @apply bg-void-900/40 border border-void-700/50 text-void-200 hover:border-void-500 hover:text-white backdrop-blur-md;
+  }
+
+  .input-field {
+    @apply w-full bg-void-950/50 border border-void-700/40 rounded-xl px-4 py-3 text-sm text-white placeholder:text-void-600 focus:outline-none focus:ring-1 focus:ring-neon-blue-500/50 focus:border-neon-blue-500/50 transition-all backdrop-blur-sm;
+  }
+
+  .badge {
+    @apply px-2 py-1 rounded-md font-mono text-[9px] font-bold uppercase tracking-widest border;
+  }
+}
+
+@layer utilities {
+  .text-neon-cyan {
+    @apply text-neon-cyan-400 drop-shadow-[0_0_12px_rgba(0,242,255,0.3)];
+  }
+  
+  .text-neon-blue {
+    @apply text-neon-blue-400 drop-shadow-[0_0_12px_rgba(0,102,255,0.3)];
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .cyber-grid-overlay {
+    background-image: 
+      radial-gradient(circle at 2px 2px, rgba(0, 102, 255, 0.05) 1px, transparent 0);
+    background-size: 32px 32px;
+  }
+
+  .neon-glow-blue {
+    box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+  }
+}
+
+
+/* Accessibility Support */
+[data-accessibility="high-contrast"] {
+  --color-void-900: #000000;
+  --color-void-850: #000000;
+  --color-void-800: #111111;
+  --color-void-700: #ffffff;
+  --color-void-50: #ffffff;
+  --color-neon-blue-500: #00f2ff;
+}
