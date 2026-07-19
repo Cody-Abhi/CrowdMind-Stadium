@@ -172,7 +172,8 @@ export default function App() {
                       role="listbox"
                       aria-label="Select user role"
                     >
-                      {(['admin', 'engineer', 'technician', 'auditor'] as UserRole[]).map((r) => (
+                      {/* Security: admin role is only visible/selectable if user is already admin */}
+                      {(['engineer', 'technician', 'auditor', ...(userProfile?.role === 'admin' ? ['admin'] : [])] as UserRole[]).map((r) => (
                         <button
                           key={r}
                           onClick={() => {

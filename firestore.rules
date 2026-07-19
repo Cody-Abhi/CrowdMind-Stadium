@@ -1,85 +1,116 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Helper functions
+    // ── Helper functions ──────────────────────────────────────────────────────
+
     function isSignedIn() {
       return request.auth != null;
     }
-    
+
     function getUserData() {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
-    
+
     function isAdmin() {
       return isSignedIn() && getUserData().role == 'admin';
     }
-    
+
     function isEngineer() {
       return isSignedIn() && getUserData().role == 'engineer';
     }
-    
-    function isTechnician() {
-      return isSignedIn() && getUserData().role == 'technician';
-    }
-    
+
     function isAuditor() {
       return isSignedIn() && getUserData().role == 'auditor';
     }
-    
+
     function isStaff() {
       return isSignedIn() && (getUserData().role in ['admin', 'engineer', 'technician']);
     }
 
-    // User profiles
+    // ── User profiles ─────────────────────────────────────────────────────────
+    // Critical: non-admin users can update their own profile fields (name, prefs)
+    // but CANNOT change the `role` field (field-level restriction).
+    // Self-created profiles are forced to fan | volunteer only.
     match /users/{userId} {
       allow read: if isSignedIn();
-      allow write: if isAdmin() || (isSignedIn() && request.auth.uid == userId);
+
+      // Admin can write anything
+      allow write: if isAdmin();
+
+      // User can create their own profile but only with non-elevated roles
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && request.resource.data.role in ['fan', 'volunteer'];
+
+      // User can update their own profile but CANNOT change the role field
+      allow update: if isSignedIn()
+        && request.auth.uid == userId
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']);
     }
 
-    // Documents & OEM Manuals Ingestion Catalog
+    // ── Documents & OEM Manuals Ingestion Catalog ─────────────────────────────
     match /documents/{docId} {
       allow read: if isSignedIn();
       allow write: if isAdmin() || isEngineer();
     }
-    
+
     match /chunks/{chunkId} {
       allow read: if isSignedIn();
       allow write: if isAdmin() || isEngineer();
     }
 
-    // Equipment & Assets
+    // ── Equipment & Assets ────────────────────────────────────────────────────
     match /equipment/{eqId} {
       allow read: if isSignedIn();
       allow write: if isAdmin() || isEngineer();
     }
 
-    // Work Orders
+    // ── Work Orders ───────────────────────────────────────────────────────────
     match /work_orders/{woId} {
       allow read: if isSignedIn();
       allow create, update: if isStaff();
       allow delete: if isAdmin();
     }
 
-    // Inspection Records
+    // ── Inspection Records ────────────────────────────────────────────────────
     match /inspection_records/{recordId} {
       allow read: if isSignedIn();
       allow write: if isStaff();
     }
 
-    // Standard Operating Procedures (SOPs)
+    // ── Standard Operating Procedures (SOPs) ──────────────────────────────────
     match /procedures/{procId} {
       allow read: if isSignedIn();
       allow write: if isAdmin() || isEngineer();
     }
 
-    // AI Query Logs (Audit trail)
+    // ── AI Query Logs (Immutable Audit Trail) ─────────────────────────────────
     match /query_logs/{logId} {
       allow read: if isAdmin() || isEngineer() || isAuditor();
       allow create: if isSignedIn();
-      allow update, delete: if false; // Immutable audit log
+      allow update, delete: if false; // Immutable — never modifiable
     }
-    
-    // Catch-all default deny
+
+    // ── Safety Broadcasts ─────────────────────────────────────────────────────
+    match /safety_broadcasts/{broadcastId} {
+      allow read: if isSignedIn();
+      allow write: if isStaff();
+    }
+
+    // ── Volunteer Tasks ───────────────────────────────────────────────────────
+    match /volunteer_tasks/{taskId} {
+      allow read: if isSignedIn();
+      allow write: if isStaff();
+    }
+
+    // ── Analytics Events ──────────────────────────────────────────────────────
+    match /analytics_events/{eventId} {
+      allow read: if isAdmin() || isEngineer() || isAuditor();
+      allow create: if isSignedIn();
+      allow update, delete: if false;
+    }
+
+    // ── Catch-all default deny ────────────────────────────────────────────────
     match /{document=**} {
       allow read, write: if false;
     }
