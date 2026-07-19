@@ -1,4 +1,4 @@
-import { ApiResponse, ChatMessage } from '../types';
+import { ApiResponse, ChatMessage, Citation } from '../types';
 
 export const geminiService = {
   /**
@@ -62,7 +62,7 @@ export const geminiService = {
   /**
    * Queries the natural language RAG index search.
    */
-  async queryRag(message: string): Promise<ApiResponse<{ answer: string; citations: any[]; confidence_score: number }>> {
+  async queryRag(message: string): Promise<ApiResponse<{ answer: string; citations: Citation[]; confidence_score: number }>> {
     try {
       const response = await fetch('/api/v1/ai/query', {
         method: 'POST',

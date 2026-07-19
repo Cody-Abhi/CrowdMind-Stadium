@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { HardDrive, Upload, Download, FileText, RefreshCw, Plus } from 'lucide-react';
+import { StorageItem } from '../../types';
 
 interface StorageTabProps {
-  storageItems: any[];
+  storageItems: StorageItem[];
   newFileName: string;
   setNewFileName: (val: string) => void;
   newFileSize: string;

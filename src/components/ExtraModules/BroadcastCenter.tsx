@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Megaphone, Send } from 'lucide-react';
 import { db, collection, query, orderBy, onSnapshot, addDoc } from '../../firebase';
+import { BroadcastAlert } from '../../types';
 
 export const BroadcastCenter: React.FC = () => {
-  const [broadcasts, setBroadcasts] = useState<any[]>([]);
+  const [broadcasts, setBroadcasts] = useState<BroadcastAlert[]>([]);
   const [message, setMessage] = useState('');
   const [urgency, setUrgency] = useState('medium');
   const [isSending, setIsSending] = useState(false);
@@ -12,8 +13,8 @@ export const BroadcastCenter: React.FC = () => {
   useEffect(() => {
     const q = query(collection(db, 'messaging_alerts'), orderBy('sentAt', 'desc'));
     const unsub = onSnapshot(q, (snap) => {
-      const list: any[] = [];
-      snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+      const list: BroadcastAlert[] = [];
+      snap.forEach(d => list.push({ id: d.id, ...d.data() } as BroadcastAlert));
       setBroadcasts(list);
     });
     return unsub;

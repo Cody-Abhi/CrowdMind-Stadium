@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Terminal } from 'lucide-react';
 import { db, collection, query, orderBy, onSnapshot } from '../../firebase';
+import { AnalyticsEvent } from '../../types';
 
 export const AuditLogs: React.FC = () => {
-  const [logs, setLogs] = useState<any[]>([]);
+  const [logs, setLogs] = useState<AnalyticsEvent[]>([]);
   const [filterCategory, setFilterCategory] = useState('all');
   const terminalEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const q = query(collection(db, 'analytics_events'), orderBy('timestamp', 'asc'));
     const unsub = onSnapshot(q, (snap) => {
-      const list: any[] = [];
-      snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+      const list: AnalyticsEvent[] = [];
+      snap.forEach(d => list.push({ id: d.id, ...d.data() } as AnalyticsEvent));
       setLogs(list);
     });
     return unsub;

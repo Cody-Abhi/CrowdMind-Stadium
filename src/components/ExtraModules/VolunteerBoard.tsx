@@ -4,9 +4,10 @@ import { ClipboardList, Check, Trash2, Plus, Send } from 'lucide-react';
 import { 
   db, collection, query, orderBy, onSnapshot, addDoc, updateDoc, deleteDoc, doc 
 } from '../../firebase';
+import { StewardTask } from '../../types';
 
 export const VolunteerBoard: React.FC = () => {
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<StewardTask[]>([]);
   const [title, setTitle] = useState('');
   const [location, setLocation] = useState('Sector E (East Wing)');
   const [urgency, setUrgency] = useState('medium');
@@ -15,8 +16,8 @@ export const VolunteerBoard: React.FC = () => {
   useEffect(() => {
     const q = query(collection(db, 'volunteer_tasks'), orderBy('createdAt', 'desc'));
     const unsub = onSnapshot(q, (snap) => {
-      const list: any[] = [];
-      snap.forEach(d => list.push({ id: d.id, ...d.data() }));
+      const list: StewardTask[] = [];
+      snap.forEach(d => list.push({ id: d.id, ...d.data() } as StewardTask));
       setTasks(list);
     });
     return unsub;

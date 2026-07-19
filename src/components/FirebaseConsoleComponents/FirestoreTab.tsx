@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Database, Search, User } from 'lucide-react';
+import { AnalyticsEvent } from '../../types';
 
 interface FirestoreTabProps {
-  analyticsEvents: any[];
+  analyticsEvents: AnalyticsEvent[];
 }
 
 export const FirestoreTab: React.FC<FirestoreTabProps> = ({ analyticsEvents }) => {

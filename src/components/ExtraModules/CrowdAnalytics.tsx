@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Users, Cpu, AlertTriangle, Play } from 'lucide-react';
 import { db, collection, onSnapshot } from '../../firebase';
 import { geminiService } from '../../services/geminiService';
+import { StadiumGate } from '../../types';
 import { 
   ResponsiveContainer, BarChart, Bar, Cell, XAxis, YAxis, Tooltip, CartesianGrid 
 } from 'recharts';
 
 export const CrowdAnalytics: React.FC = () => {
-  const [gates, setGates] = useState<any[]>([]);
+  const [gates, setGates] = useState<StadiumGate[]>([]);
   const [forecast, setForecast] = useState<string | null>(null);
   const [isGeneratingForecast, setIsGeneratingForecast] = useState(false);
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'stadium_gates'), (snap) => {
-      const list: any[] = [];
-      snap.forEach(d => list.push(d.data()));
+      const list: StadiumGate[] = [];
+      snap.forEach(d => list.push(d.data() as StadiumGate));
       setGates(list.sort((a, b) => a.order - b.order));
     });
     return unsub;
