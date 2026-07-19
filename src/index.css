@@ -130,7 +130,7 @@
   --color-neon-blue-500: #00f2ff;
 }
 
-@media (prefers-reduced-motion: reduce), [data-reduced-motion="true"] {
+@media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-delay: -1ms !important;
     animation-duration: 1ms !important;
@@ -142,4 +142,18 @@
     transform: none !important;
   }
 }
+
+[data-reduced-motion="true"] *, 
+[data-reduced-motion="true"]::before, 
+[data-reduced-motion="true"]::after {
+  animation-delay: -1ms !important;
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  background-attachment: initial !important;
+  scroll-behavior: auto !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+  transform: none !important;
+}
+
 

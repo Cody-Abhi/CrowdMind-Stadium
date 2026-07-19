@@ -31,17 +31,18 @@ export const GeminiExecutiveBriefing: React.FC<GeminiExecutiveBriefingProps> = (
       <div>
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-2">
-            <Bot className="w-5 h-5 text-neon-purple-400 animate-pulse" />
-            <h3 className="font-display font-bold text-lg text-white">Gemini C-Suite Briefing Generator</h3>
+            <Bot className="w-5 h-5 text-neon-purple-400 animate-pulse" aria-hidden="true" />
+            <h3 className="font-display font-bold text-lg text-white">AI Decision Support (Gemini 2.5 Briefing)</h3>
           </div>
-          <span className="px-2 py-0.5 rounded bg-neon-purple-500/10 border border-neon-purple-500/30 text-[9px] font-mono text-neon-purple-400 uppercase">
-            Secure AI Model
+          <span className="px-2 py-0.5 rounded bg-neon-purple-500/10 border border-neon-purple-500/30 text-[9px] font-mono text-neon-purple-400 uppercase font-bold">
+            Cognitive Mesh
           </span>
         </div>
 
         <p className="text-void-400 text-xs mb-5">
-          Select an operations matrix focal perspective to compile a strategic executive briefing on plant performance.
+          Select an operational perspective to synthesize predictive diagnostics and strategic decision recommendations.
         </p>
+
 
         {/* Focus Options Pills */}
         <div className="grid grid-cols-2 gap-2 mb-6">
