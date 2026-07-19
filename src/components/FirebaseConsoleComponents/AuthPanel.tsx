@@ -1,9 +1,11 @@
 import React from 'react';
 import { Lock, User, LogOut, Key, Mail, ShieldCheck } from 'lucide-react';
+import { FirebaseUser } from '../../firebase';
+import { UserProfile, UserRole } from '../../contexts/AuthContext';
 
 interface AuthPanelProps {
-  currentUser: any;
-  userProfile: any;
+  currentUser: FirebaseUser | null;
+  userProfile: UserProfile | null;
   logout: () => Promise<void>;
   authEmail: string;
   setAuthEmail: (val: string) => void;
@@ -12,7 +14,7 @@ interface AuthPanelProps {
   authName: string;
   setAuthName: (val: string) => void;
   authRole: 'admin' | 'engineer' | 'technician' | 'auditor';
-  setAuthRole: (val: any) => void;
+  setAuthRole: (val: 'admin' | 'engineer' | 'technician' | 'auditor') => void;
   isRegisterMode: boolean;
   setIsRegisterMode: (val: boolean) => void;
   authError: string | null;

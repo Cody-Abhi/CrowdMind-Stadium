@@ -257,9 +257,9 @@ async function startServer() {
         message: "RAG query processed successfully.",
         timestamp: new Date().toISOString()
       });
-    } catch (err: any) {
-      console.error("RAG Query Error:", err);
-      res.status(500).json({ success: false, message: err.message });
+    } catch (err: unknown) {
+      console.error('RAG Query Error:', err);
+      res.status(500).json({ success: false, message: 'An internal error occurred. Please try again.' });
     }
   });
 
@@ -325,8 +325,9 @@ async function startServer() {
         message: "Multi-agent root cause analysis report compile completed.",
         timestamp: new Date().toISOString()
       });
-    } catch (err: any) {
-      res.status(500).json({ success: false, message: err.message });
+    } catch (err: unknown) {
+      console.error('RCA Error:', err);
+      res.status(500).json({ success: false, message: 'An internal error occurred. Please try again.' });
     }
   });
 
@@ -346,30 +347,41 @@ async function startServer() {
     });
   });
 
-  // Backward compatibility alias endpoints
+  // Backward compatibility alias — /api/gemini/generate
   app.post("/api/gemini/generate", standardLimiter, async (req, res) => {
     try {
       const { prompt, systemInstruction } = req.body;
+      const cleanPrompt = sanitizeInput(prompt);
+      if (!cleanPrompt) {
+        res.status(400).json({ error: 'Prompt is required.' });
+        return;
+      }
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
-        contents: sanitizeInput(prompt),
+        contents: cleanPrompt,
         config: {
           systemInstruction: sanitizeInput(systemInstruction) || "You are StadiumMind, the Unified Industrial Asset & Operations Brain.",
           temperature: 0.7,
         },
       });
       res.json({ text: response.text });
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+      console.error('Generate Error:', error);
+      res.status(500).json({ error: 'An internal error occurred. Please try again.' });
     }
   });
 
   app.post("/api/gemini/chat", standardLimiter, async (req, res) => {
     try {
       const { history, message, context } = req.body;
+      const cleanMessage = sanitizeInput(message);
+      if (!cleanMessage) {
+        res.status(400).json({ error: 'Message is required.' });
+        return;
+      }
       const roleStr = context?.role ? `The user's role is ${context.role.toUpperCase()}. ` : "";
       const alertStr = context?.alertsCount ? `There are currently ${context.alertsCount} active alarms. ` : "";
-      
+
       const systemInstruction = `You are StadiumMind, the Unified Industrial Asset & Operations Brain for Plant Lusail.
       ${roleStr}${alertStr} Be extremely professional and concise.`;
 
@@ -378,10 +390,11 @@ async function startServer() {
         config: { systemInstruction },
         history: Array.isArray(history) ? history : [],
       });
-      const response = await chat.sendMessage({ message: sanitizeInput(message) });
+      const response = await chat.sendMessage({ message: cleanMessage });
       res.json({ text: response.text });
-    } catch (error: any) {
-      res.status(500).json({ error: error.message });
+    } catch (error: unknown) {
+      console.error('Chat Error:', error);
+      res.status(500).json({ error: 'An internal error occurred. Please try again.' });
     }
   });
 

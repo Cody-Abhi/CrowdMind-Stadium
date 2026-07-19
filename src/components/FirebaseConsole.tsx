@@ -14,6 +14,7 @@ import {
 import { disableNetwork, enableNetwork } from 'firebase/firestore';
 import { useAuth } from '../contexts/AuthContext';
 import { seedInitialStadiumData } from '../lib/firebaseSeeder';
+import { StorageItem, BroadcastAlert, AnalyticsEvent, FunctionLog, RemoteConfigRecord } from '../types';
 
 // Icon Imports
 import { 
@@ -61,23 +62,23 @@ export default function FirebaseConsole() {
   const [offlineStatusMsg, setOfflineStatusMsg] = useState('Fully operational - Firestore syncing to Cloud mainframes.');
 
   // --- CLOUD STORAGE STATE ---
-  const [storageItems, setStorageItems] = useState<any[]>([]);
+  const [storageItems, setStorageItems] = useState<StorageItem[]>([]);
   const [newFileName, setNewFileName] = useState('');
   const [newFileSize, setNewFileSize] = useState('2.4 MB');
   const [newFileCategory, setNewFileCategory] = useState('General Logs');
   const [isUploading, setIsUploading] = useState(false);
 
   // --- CLOUD FUNCTIONS STATE ---
-  const [functionsLogs, setFunctionsLogs] = useState<any[]>([]);
+  const [functionsLogs, setFunctionsLogs] = useState<FunctionLog[]>([]);
   const [isExecutingFunction, setIsExecutingFunction] = useState<string | null>(null);
 
   // --- CLOUD MESSAGING STATE ---
-  const [messagingAlerts, setMessagingAlerts] = useState<any[]>([]);
+  const [messagingAlerts, setMessagingAlerts] = useState<BroadcastAlert[]>([]);
   const [newMessageText, setNewMessageText] = useState('');
   const [newMessageUrgency, setNewMessageUrgency] = useState('medium');
 
   // --- ANALYTICS EVENT LOG STATE ---
-  const [analyticsEvents, setAnalyticsEvents] = useState<any[]>([]);
+  const [analyticsEvents, setAnalyticsEvents] = useState<AnalyticsEvent[]>([]);
 
   // --- SEED STATUS ---
   const [seedingInProgress, setSeedingInProgress] = useState(false);
@@ -131,31 +132,31 @@ service cloud.firestore {
   useEffect(() => {
     const configDocRef = doc(db, 'remote_config', 'stadium_settings');
     const unsubConfig = onSnapshot(configDocRef, (snapshot) => {
-      if (snapshot.exists()) setRemoteConfig(snapshot.data() as any);
+      if (snapshot.exists()) setRemoteConfig(snapshot.data() as typeof remoteConfig);
       setIsConfigLoading(false);
     }, () => setIsConfigLoading(false));
 
     const unsubStorage = onSnapshot(query(collection(db, 'cloud_storage_metadata'), orderBy('name', 'asc')), (snapshot) => {
-      const items: any[] = [];
-      snapshot.forEach((d) => items.push({ id: d.id, ...d.data() }));
+      const items: StorageItem[] = [];
+      snapshot.forEach((d) => items.push({ id: d.id, ...d.data() } as StorageItem));
       setStorageItems(items);
     });
 
     const unsubMessaging = onSnapshot(query(collection(db, 'messaging_alerts'), orderBy('sentAt', 'desc'), limit(15)), (snapshot) => {
-      const msgs: any[] = [];
-      snapshot.forEach((d) => msgs.push({ id: d.id, ...d.data() }));
+      const msgs: BroadcastAlert[] = [];
+      snapshot.forEach((d) => msgs.push({ id: d.id, ...d.data() } as BroadcastAlert));
       setMessagingAlerts(msgs);
     });
 
     const unsubAnalytics = onSnapshot(query(collection(db, 'analytics_events'), orderBy('timestamp', 'desc'), limit(25)), (snapshot) => {
-      const evts: any[] = [];
-      snapshot.forEach((d) => evts.push({ id: d.id, ...d.data() }));
+      const evts: AnalyticsEvent[] = [];
+      snapshot.forEach((d) => evts.push({ id: d.id, ...d.data() } as AnalyticsEvent));
       setAnalyticsEvents(evts);
     });
 
     const unsubFunctions = onSnapshot(query(collection(db, 'cloud_functions_log'), orderBy('executedAt', 'desc'), limit(15)), (snapshot) => {
-      const logs: any[] = [];
-      snapshot.forEach((d) => logs.push({ id: d.id, ...d.data() }));
+      const logs: FunctionLog[] = [];
+      snapshot.forEach((d) => logs.push({ id: d.id, ...d.data() } as FunctionLog));
       setFunctionsLogs(logs);
     });
 
@@ -202,7 +203,7 @@ service cloud.firestore {
     }
   };
 
-  const handleUpdateConfig = async (key: string, value: any) => {
+  const handleUpdateConfig = async (key: string, value: boolean | string | number) => {
     try {
       const configDocRef = doc(db, 'remote_config', 'stadium_settings');
       await updateDoc(configDocRef, { [key]: value, lastUpdated: new Date().toISOString() });
@@ -307,8 +308,8 @@ service cloud.firestore {
         await loginWithEmail(authEmail, authPassword);
         logAnalyticsEvent('user_login', 'Authentication');
       }
-    } catch (err: any) {
-      setAuthError(err.message || 'Authentication error.');
+    } catch (err: unknown) {
+      setAuthError(err instanceof Error ? err.message : 'Authentication error.');
     }
   };
 

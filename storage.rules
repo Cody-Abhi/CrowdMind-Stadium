@@ -1,0 +1,35 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper functions mirroring firestore.rules for consistency
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    // Default deny — everything is blocked unless explicitly allowed below
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // User profile assets (avatars, etc.) — owner can read/write their own path
+    match /users/{userId}/{allPaths=**} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && isOwner(userId)
+        && request.resource.size < 5 * 1024 * 1024  // max 5 MB
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // OEM Manuals / plant documents — authenticated reads, staff-only writes
+    // (Staff = admin | engineer | technician, enforced by Firestore role lookup)
+    match /documents/{docId}/{allPaths=**} {
+      allow read: if isSignedIn();
+      // Writes require additional auth check via Firestore (client must call Firestore first)
+      // This is a belt-and-suspenders deny; Firestore rules are the authoritative layer.
+      allow write: if false;
+    }
+  }
+}

@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Terminal, Play, RefreshCw, Cpu, Activity, Clock } from 'lucide-react';
+import { FunctionLog } from '../../types';
 
 interface FunctionsTabProps {
-  functionsLogs: any[];
+  functionsLogs: FunctionLog[];
   isExecutingFunction: string | null;
   handleTriggerCloudFunction: (funcId: string, funcName: string) => Promise<void>;
 }

@@ -2,12 +2,15 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Shield, FileCode, CheckCircle, AlertTriangle, Layers, Zap } from 'lucide-react';
 
+import { CompoundIndex } from '../../types';
+
 interface SecurityTabProps {
   rawSecurityRules: string;
   deployRulesSuccess: boolean;
   handleDeployRules: () => void;
-  compoundIndexes: any[];
+  compoundIndexes: CompoundIndex[];
 }
+
 
 export const SecurityTab: React.FC<SecurityTabProps> = ({
   rawSecurityRules,

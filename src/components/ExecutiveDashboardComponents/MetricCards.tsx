@@ -204,23 +204,23 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
           <div className="p-2.5 rounded-xl bg-neon-cyan-500/10 border border-neon-cyan-500/20 text-neon-cyan-400">
             <Leaf className="w-5 h-5" />
           </div>
-          <span className="text-[10px] font-mono text-state-success-text flex items-center gap-1 bg-state-success-bg/10 px-2 py-0.5 rounded-full">
-            91% Diversion
+          <span className="text-[10px] font-mono text-state-success-text flex items-center gap-1 bg-state-success-bg/10 px-2 py-0.5 rounded-full font-bold">
+            91% Landfill Diversion
           </span>
         </div>
 
-        <h3 className="text-void-400 text-xs font-mono uppercase tracking-wider">Carbon Displaced today</h3>
+        <h3 className="text-void-400 text-xs font-mono uppercase tracking-wider">Sustainability & Energy Core</h3>
         <div className="mt-1 flex items-baseline gap-2">
           <span className="text-3xl font-display font-extrabold text-white tracking-tight">
             {carbonSaved}
           </span>
-          <span className="text-xs text-void-400 font-mono">Tons CO₂ Saved</span>
+          <span className="text-xs text-void-400 font-mono">Tons Transit CO₂ Displaced</span>
         </div>
 
-        <div className="mt-5 space-y-2 text-xs">
+        <div className="mt-5 space-y-3 text-xs">
           <div>
             <div className="flex justify-between text-[10px] font-mono text-void-400 mb-1">
-              <span>METRO & SHUTTLE OFFSET</span>
+              <span>METRO/BUS TRANSIT OFFSET</span>
               <span className="text-neon-cyan-400">{transitUse}%</span>
             </div>
             <div className="h-1.5 w-full bg-void-900 rounded-full overflow-hidden">
@@ -232,11 +232,26 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
               />
             </div>
           </div>
+          
+          <div>
+            <div className="flex justify-between text-[10px] font-mono text-void-400 mb-1">
+              <span>WATER/STEAM RECOVERY RATE</span>
+              <span className="text-emerald-400">84.6%</span>
+            </div>
+            <div className="h-1.5 w-full bg-void-900 rounded-full overflow-hidden">
+              <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `84.6%` }}
+                transition={{ duration: 1.0, ease: "circOut" }}
+                className="h-full bg-emerald-500" 
+              />
+            </div>
+          </div>
         </div>
 
         <div className="mt-4 pt-4 border-t border-void-600/10 grid grid-cols-2 gap-4 text-xs font-sans">
           <div>
-            <span className="text-void-500 block">Cooling Efficiency</span>
+            <span className="text-void-500 block">Plant Cooling load</span>
             <strong className="text-white text-sm font-semibold">{(plasticSaved / 10).toLocaleString()} kW</strong>
           </div>
           <div>
@@ -245,6 +260,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
           </div>
         </div>
       </motion.div>
+
 
       {/* CARD 4: VOLUNTEER MAINBOARD STATUS */}
       <motion.div 

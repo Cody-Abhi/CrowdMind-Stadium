@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Bell, Send, User, Clock, AlertTriangle } from 'lucide-react';
+import { BroadcastAlert } from '../../types';
 
 interface MessagingTabProps {
-  messagingAlerts: any[];
+  messagingAlerts: BroadcastAlert[];
   newMessageText: string;
   setNewMessageText: (val: string) => void;
   newMessageUrgency: string;

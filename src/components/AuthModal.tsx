@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAuth, UserRole } from '../contexts/AuthContext';
 import { 
@@ -7,15 +7,14 @@ import {
   Lock, 
   User, 
   Sparkles, 
-  ShieldCheck, 
-  Users, 
   UserPlus, 
   LockKeyhole,
   Compass,
   Award,
-  Settings,
-  AlertCircle
+  AlertCircle,
+  Info
 } from 'lucide-react';
+
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -33,6 +32,27 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [selectedRole, setSelectedRole] = useState<UserRole>('fan');
   const [loading, setLoading] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
+
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Close on Escape key press, and handle focus trapping
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Focus close button on open
+    setTimeout(() => {
+      closeButtonRef.current?.focus();
+    }, 50);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -71,11 +91,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }
   };
 
-  const roles = [
-    { id: 'fan' as UserRole, label: 'Fan Guide', icon: Compass, description: 'Spatial Assistant & Wayfinding' },
-    { id: 'volunteer' as UserRole, label: 'Volunteer', icon: Award, description: 'Spectator Guidance Tasks' },
-    { id: 'ops' as UserRole, label: 'Operations', icon: Settings, description: 'Live Crowd Monitoring & Safety' },
-    { id: 'admin' as UserRole, label: 'Admin Panel', icon: ShieldCheck, description: 'Global Venue Settings' }
+  // Security: Only fan and volunteer are available at public sign-up.
+  // Admin / engineer / technician / auditor roles are granted by a system administrator.
+  const roles: { id: 'fan' | 'volunteer'; label: string; icon: React.ElementType; description: string }[] = [
+    { id: 'fan', label: 'Fan Guide', icon: Compass, description: 'Spatial Assistant & Wayfinding' },
+    { id: 'volunteer', label: 'Volunteer', icon: Award, description: 'Spectator Guidance Tasks' },
   ];
 
   return (
@@ -101,6 +121,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         >
           {/* Close trigger button */}
           <button 
+            ref={closeButtonRef}
             onClick={onClose}
             className="absolute top-4 right-4 p-1.5 rounded-lg text-void-400 hover:text-white hover:bg-void-750 transition-colors"
             aria-label="Close authentication dialog"
@@ -205,6 +226,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 })}
               </div>
             </div>
+
+            {/* Restricted roles info note */}
+            {isSignUp && (
+              <div className="flex items-start gap-2 p-2.5 rounded-lg bg-void-900/60 border border-void-600/20 text-[10px] text-void-500">
+                <Info className="w-3 h-3 mt-0.5 flex-shrink-0 text-neon-blue-400" aria-hidden="true" />
+                <span>Engineer, Technician, Admin, and Auditor access is granted by a system administrator after account creation.</span>
+              </div>
+            )}
 
             {/* Error alerts */}
             {(localError || authError) && (

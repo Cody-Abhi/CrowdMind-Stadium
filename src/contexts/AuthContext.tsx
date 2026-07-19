@@ -15,7 +15,11 @@ import {
   FirebaseUser
 } from '../firebase';
 
-export type UserRole = 'admin' | 'engineer' | 'technician' | 'auditor';
+export type UserRole = 'admin' | 'engineer' | 'technician' | 'auditor' | 'fan' | 'volunteer';
+/** Elevated roles that can only be granted by an admin — not self-selectable at sign-up. */
+export const ELEVATED_ROLES: UserRole[] = ['admin', 'engineer', 'technician', 'auditor'];
+/** Roles available during public self-service sign-up. */
+export const SELF_SERVICE_ROLES: UserRole[] = ['fan', 'volunteer'];
 
 export interface UserProfile {
   uid: string;
@@ -34,6 +38,7 @@ interface AuthContextType {
   registerWithEmail: (email: string, pass: string, name: string, role: UserRole) => Promise<void>;
   loginWithGoogle: (role: UserRole) => Promise<void>;
   logout: () => Promise<void>;
+  /** Admin-only: throws if the current user is not an admin. */
   updateUserRole: (newRole: UserRole) => Promise<void>;
 }
 
@@ -68,9 +73,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             await setDoc(userDocRef, defaultProfile);
             setUserProfile(defaultProfile);
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : 'Failed to load user profile';
           console.error('Error fetching user profile:', err);
-          setError(err.message || 'Failed to load user profile');
+          setError(message);
         }
       } else {
         setUserProfile(null);
@@ -86,8 +92,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, pass);
-    } catch (err: any) {
-      setError(err.message || 'Failed to login');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to login';
+      setError(message);
       throw err;
     } finally {
       setLoading(false);
@@ -114,8 +121,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       await setDoc(doc(db, 'users', user.uid), newProfile);
       setUserProfile(newProfile);
-    } catch (err: any) {
-      setError(err.message || 'Failed to register');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to register';
+      setError(message);
       throw err;
     } finally {
       setLoading(false);
@@ -147,8 +155,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setUserProfile(docSnap.data() as UserProfile);
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to login with Google');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to login with Google';
+      setError(message);
       throw err;
     } finally {
       setLoading(false);
@@ -162,8 +171,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await signOut(auth);
       setUserProfile(null);
       setCurrentUser(null);
-    } catch (err: any) {
-      setError(err.message || 'Failed to logout');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to logout';
+      setError(message);
       throw err;
     } finally {
       setLoading(false);
@@ -172,13 +182,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updateUserRole = async (newRole: UserRole) => {
     if (!currentUser) return;
+    // Security: only admin users may change roles.
+    if (userProfile?.role !== 'admin') {
+      const err = new Error('Permission denied: only administrators can change user roles.');
+      setError(err.message);
+      throw err;
+    }
     setError(null);
     try {
       const userDocRef = doc(db, 'users', currentUser.uid);
       await setDoc(userDocRef, { role: newRole }, { merge: true });
       setUserProfile(prev => prev ? { ...prev, role: newRole } : null);
-    } catch (err: any) {
-      setError(err.message || 'Failed to update user role');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to update user role';
+      setError(message);
       throw err;
     }
   };

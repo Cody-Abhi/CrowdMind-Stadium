@@ -11,7 +11,7 @@ interface RemoteConfigTabProps {
     gateAOverflowEnabled: boolean;
   };
   isConfigLoading: boolean;
-  handleUpdateConfig: (key: string, value: any) => Promise<void>;
+  handleUpdateConfig: (key: string, value: boolean | string | number) => Promise<void>;
 }
 
 export const RemoteConfigTab: React.FC<RemoteConfigTabProps> = ({
