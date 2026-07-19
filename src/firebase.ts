@@ -14,6 +14,7 @@ import {
   initializeFirestore,
   persistentLocalCache,
   persistentMultipleTabManager,
+  getFirestore,
   doc, 
   setDoc, 
   getDoc,
@@ -44,15 +45,22 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Services with Offline Persistence
+// Initialize Services with Offline Persistence fallback
 export const auth = getAuth(app);
 
-// Configure persistent local cache for offline capabilities
-export const db = initializeFirestore(app, {
-  localCache: persistentLocalCache({
-    tabManager: persistentMultipleTabManager()
-  })
-});
+let dbInstance;
+try {
+  dbInstance = initializeFirestore(app, {
+    localCache: persistentLocalCache({
+      tabManager: persistentMultipleTabManager()
+    })
+  });
+} catch (e) {
+  console.warn("Firestore persistence failed to load, falling back to standard Firestore:", e);
+  dbInstance = getFirestore(app);
+}
+
+export const db = dbInstance;
 
 export const googleProvider = new GoogleAuthProvider();
 
