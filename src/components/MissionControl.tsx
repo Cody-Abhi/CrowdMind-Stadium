@@ -52,11 +52,12 @@ export interface StadiumSector {
 interface MissionControlProps {
   onAddAuditLog?: (tag: string, text: string) => void;
   onUpdateGeneralStats?: (spectators: number, waitTime: number, stewards: number, alerts: number) => void;
+  simulationActive?: boolean;
 }
 
 const useStadiumTelemetry = () => {
   return useQuery({
-    queryKey: ['stadium-telemetry'],
+    queryKey: ['plant-telemetry'],
     queryFn: async () => {
       return {
         totalSpectators: 48210 + Math.floor(Math.random() * 500),
@@ -84,23 +85,23 @@ export default function MissionControl({
   const [chartTicks, setChartTicks] = useState<number[]>(Array.from({ length: 24 }, () => Math.floor(Math.random() * 40) + 30));
 
   const [sectors, setSectors] = useState<StadiumSector[]>([
-    { id: "sec-101", name: "Sector 101 (North)", occupancyPercent: 54, capacity: 6000, stewardsOnDuty: 42, riskIndex: "low", details: "Seamless flow." },
-    { id: "sec-104", name: "Sector 104 (South)", occupancyPercent: 41, capacity: 7500, stewardsOnDuty: 38, riskIndex: "low", details: "Direct proximity to public taxi loop." },
-    { id: "sec-106", name: "Sector 106 (South-East)", occupancyPercent: 68, capacity: 5500, stewardsOnDuty: 48, riskIndex: "medium", details: "Moderate seating congestion." },
-    { id: "sec-108", name: "Sector 108 (East VIP)", occupancyPercent: 82, capacity: 4000, stewardsOnDuty: 65, riskIndex: "elevated", details: "High concentration of arrivals." },
-    { id: "sec-112", name: "Sector 112 (West VIP)", occupancyPercent: 35, capacity: 4500, stewardsOnDuty: 50, riskIndex: "low", details: "Optimal capacity headroom." },
-    { id: "sec-ingress-b", name: "Gate B (East Ingress)", occupancyPercent: 93, capacity: 8000, stewardsOnDuty: 99, riskIndex: "extreme", details: "Ingress bottleneck alert." }
+    { id: "sec-101", name: "Sector A (Compressor Pad)", occupancyPercent: 54, capacity: 6000, stewardsOnDuty: 42, riskIndex: "low", details: "Vibration patterns within normal limits." },
+    { id: "sec-104", name: "Sector B (Pipe Gallery)", occupancyPercent: 41, capacity: 7500, stewardsOnDuty: 38, riskIndex: "low", details: "No pressure drop detected." },
+    { id: "sec-106", name: "Sector C (Storage Area)", occupancyPercent: 68, capacity: 5500, stewardsOnDuty: 48, riskIndex: "medium", details: "Valve manifold feedback lagging by 40ms." },
+    { id: "sec-108", name: "Sector D (Control Room)", occupancyPercent: 82, capacity: 4000, stewardsOnDuty: 65, riskIndex: "elevated", details: "High query ingestion rate on vector store." },
+    { id: "sec-112", name: "Sector E (Exchanger Bank)", occupancyPercent: 35, capacity: 4500, stewardsOnDuty: 50, riskIndex: "low", details: "Thermal exchange optimal." },
+    { id: "sec-ingress-b", name: "Inlet B (Main Inflow)", occupancyPercent: 93, capacity: 8000, stewardsOnDuty: 99, riskIndex: "extreme", details: "Inlet B pressure bottleneck threshold reached." }
   ]);
 
   const [incidents, setIncidents] = useState<Incident[]>([
-    { id: "inc-101", time: "12:14:02 UTC", category: "crowd", urgency: "critical", location: "Gate B Outer Turnstiles", description: "Spectator queue back-up of 150+ people.", status: "pending" },
-    { id: "inc-102", time: "12:15:45 UTC", category: "medical", urgency: "high", location: "Section 108, Row L", description: "Spectator requesting heat assistance.", status: "dispatched", assignedTo: "Squad Delta" },
-    { id: "inc-103", time: "12:18:20 UTC", category: "security", urgency: "medium", location: "Sector D Corridor 2", description: "AI flagged tailgating entrance.", status: "pending" }
+    { id: "inc-101", time: "12:14:02 UTC", category: "crowd", urgency: "critical", location: "Compressor C-204 Pad", description: "Vibration threshold exceeded by 14%.", status: "pending" },
+    { id: "inc-102", time: "12:15:45 UTC", category: "medical", urgency: "high", location: "Pump P-101 Oil Line", description: "Technician requested thermal sensor override.", status: "dispatched", assignedTo: "Squad Delta" },
+    { id: "inc-103", time: "12:18:20 UTC", category: "security", urgency: "medium", location: "Heat Exchanger E-105", description: "AI flagged chemical wash bypass valve open.", status: "pending" }
   ]);
 
   const [recommendations, setRecommendations] = useState<AIRecommendation[]>([
-    { id: "rec-201", model: "Spatial Friction v4.12", confidence: 96.4, trigger: "Gate B Bottleneck", actionableText: "Reroute Gate B ingress to Gate C.", impactLabel: "Wait: -6.5m", status: "available" },
-    { id: "rec-202", model: "Hydration Analytics", confidence: 88.1, trigger: "High Temp Index", actionableText: "Increase cooling fan ventilation.", impactLabel: "Comfort: +14%", status: "available" }
+    { id: "rec-201", model: "Root Cause Engine v1.0", confidence: 96.4, trigger: "C-204 Vibration", actionableText: "Reroute Inlet B flow through bypass valve V-42.", impactLabel: "Pressure: -2.5 bar", status: "available" },
+    { id: "rec-202", model: "Thermal Analytics Agent", confidence: 88.1, trigger: "E-105 Temp Spike", actionableText: "Increase water cooling radiator speed.", impactLabel: "Temp: -12C", status: "available" }
   ]);
 
   useEffect(() => {
@@ -146,8 +147,8 @@ export default function MissionControl({
       time: new Date().toISOString().substring(11, 19) + " UTC",
       category: "security",
       urgency: "high",
-      location: "Gate A VIP Entry",
-      description: "Heavy transit arrival pressure.",
+      location: "Compressor C-204 Inlet",
+      description: "Turbulent flow pressure spike.",
       status: "pending"
     };
     setIncidents(p => [newInc, ...p]);
@@ -162,9 +163,9 @@ export default function MissionControl({
             <div className="p-2 rounded-xl bg-neon-blue-500/10 border border-neon-blue-500/20">
               <Cpu className="w-5 h-5 text-neon-blue-400" />
             </div>
-            <h1 className="font-display font-black text-2xl tracking-tight text-white uppercase italic">Neural Command Center</h1>
+            <h1 className="font-display font-black text-2xl tracking-tight text-white uppercase italic">Operations Command Center</h1>
           </div>
-          <p className="text-void-400 text-sm max-w-lg">Autonomous stadium operations grid providing real-time cognitive oversight.</p>
+          <p className="text-void-400 text-sm max-w-lg">Autonomous plant operations grid providing real-time cognitive oversight.</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="glass-panel px-4 py-2 flex items-center gap-3">

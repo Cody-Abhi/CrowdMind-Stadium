@@ -15,7 +15,7 @@ import {
   FirebaseUser
 } from '../firebase';
 
-export type UserRole = 'fan' | 'volunteer' | 'ops' | 'admin';
+export type UserRole = 'admin' | 'engineer' | 'technician' | 'auditor';
 
 export interface UserProfile {
   uid: string;
@@ -60,9 +60,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             // Fallback default profile if registered elsewhere
             const defaultProfile: UserProfile = {
               uid: user.uid,
-              name: user.displayName || 'Spectator',
+              name: user.displayName || 'Operator',
               email: user.email || '',
-              role: 'fan',
+              role: 'technician',
               createdAt: new Date().toISOString()
             };
             await setDoc(userDocRef, defaultProfile);

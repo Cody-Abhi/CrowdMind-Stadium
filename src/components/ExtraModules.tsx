@@ -12,12 +12,12 @@ import {
 } from 'recharts';
 
 // ==========================================
-// 1. VOLUNTEER STEWARDSHIP BOARD
+// 1. PLANT WORK ORDER MAINBOARD
 // ==========================================
 export const VolunteerBoard = () => {
   const [tasks, setTasks] = useState<any[]>([]);
   const [title, setTitle] = useState('');
-  const [location, setLocation] = useState('Gate A (North Entrance)');
+  const [location, setLocation] = useState('Sector E (East Wing)');
   const [urgency, setUrgency] = useState('medium');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -73,7 +73,7 @@ export const VolunteerBoard = () => {
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
             <ClipboardList className="w-5 h-5 text-neon-blue-400" />
-            <h3 className="font-display font-bold text-lg text-white">Active Steward Dispatch</h3>
+            <h3 className="font-display font-bold text-lg text-white">Active Maintenance Work Orders</h3>
           </div>
           <span className="px-2 py-0.5 rounded bg-neon-blue-500/10 border border-neon-blue-500/30 text-[9px] font-mono text-neon-blue-400 uppercase font-bold">
             Live Link Active
@@ -148,10 +148,10 @@ export const VolunteerBoard = () => {
 
       <div className="glass-card p-6 flex flex-col justify-between">
         <div>
-          <h3 className="font-display font-bold text-base text-white mb-4 flex items-center gap-2">
-            <Plus className="w-4 h-4 text-neon-blue-400" />
-            Dispatch New Unit
-          </h3>
+          <div className="flex items-center gap-3 mb-6">
+            <Plus className="w-5 h-5 text-neon-blue-400" />
+            <h3 className="font-display font-bold text-base text-white">Create Work Order</h3>
+          </div>
           
           <form onSubmit={handleAddTask} className="space-y-4">
             <div>
@@ -161,23 +161,22 @@ export const VolunteerBoard = () => {
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. Assist wheelchair spectator at Sec 108"
+                placeholder="e.g. Inspect Compressor C-204 lube..."
                 className="w-full bg-void-950 border border-void-600/40 rounded-xl px-4 py-3 text-xs text-white placeholder:text-void-600 focus:outline-none focus:border-neon-blue-500 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-[10px] font-mono text-void-300 uppercase tracking-wider mb-1.5">Target Location</label>
+              <label className="block text-[10px] font-mono text-void-300 uppercase tracking-wider mb-1.5">Plant Location</label>
               <select
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 className="w-full bg-void-950 border border-void-600/40 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-neon-blue-500 transition-colors"
               >
-                <option value="Gate A (North Entrance)">Gate A (North Entrance)</option>
-                <option value="Gate B (East Concourse)">Gate B (East Concourse)</option>
-                <option value="Gate C (South Main)">Gate C (South Main)</option>
-                <option value="Section 108 VIP Tier">Section 108 VIP Tier</option>
-                <option value="Section 114 Refreshment Bar">Section 114 Refreshment Bar</option>
+                <option value="Sector E (East Wing)">Sector E (East Wing)</option>
+                <option value="Sector W (West Wing)">Sector W (West Wing)</option>
+                <option value="Sector N (North Wing)">Sector N (North Wing)</option>
+                <option value="Sector S (South Wing)">Sector S (South Wing)</option>
               </select>
             </div>
 
@@ -220,10 +219,9 @@ export const VolunteerBoard = () => {
 // 2. AI SIGNAGE BRIDGE (OCR & TRANSLATOR)
 // ==========================================
 const simulatedSigns = [
-  { text: "خروج الطوارئ - قف وافتح الباب بالكامل عند الخطر", label: "Emergency Safety Exit Sign", arabicText: "خروج الطوارئ - قف وافتح الباب بالكامل عند الخطر" },
-  { text: "بوابة كبار الشخصيات والدعوات الخاصة فقط", label: "VIP Portal Access Restriction Panel", arabicText: "بوابة كبار الشخصيات والدعوات الخاصة فقط" },
-  { text: "منطقة المأكولات والمشروبات - يمنع إدخال القوارير الزجاجية", label: "Concession Regulations Signboard", arabicText: "منطقة المأكولات والمشروبات - يمنع إدخال القوارير الزجاجية" },
-  { text: "الرجاء إبراز الباركود الخاص بالتذكرة بشكل واضح", label: "Scan bar instructions placard at outer Gate B", arabicText: "الرجاء إبراز الباركود الخاص بالتذكرة بشكل واضح" }
+  { text: "دليل الصيانة الوقائية - يجب فحص ضغط الزيت في الضاغط C-204 كل 24 ساعة", label: "OEM Manual Section 4.2 - C-204 Compressor Lubrication", arabicText: "دليل الصيانة الوقائية - يجب فحص ضغط الزيت في الضاغط C-204 كل 24 ساعة" },
+  { text: "تحذير: منطقة ضغط عالي - لا تفتح الصمام اليدوي V-42 دون إيقاف تشغيل المضخة P-101", label: "P-101 Pump Egress Safety Instruction Signboard", arabicText: "تحذير: منطقة ضغط عالي - لا تفتح الصمام اليدوي V-42 دون إيقاف تشغيل المضخة P-101" },
+  { text: "إجراءات غسيل المبادل الحراري E-105 بالمواد الكيميائية", label: "Exchanger E-105 Tube Chemical Flush SOP Procedure", arabicText: "إجراءات غسيل المبادل الحراري E-105 بالمواد الكيميائية" }
 ];
 
 export const SignageTranslator = () => {
@@ -244,8 +242,8 @@ export const SignageTranslator = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: `Translate the following Arabic signage text to English and Spanish. Sign label: "${selectedSign.label}". Arabic text: "${selectedSign.arabicText}". Explain the stadium safety or entry instruction details.`,
-          systemInstruction: "You are StadiumMind Signage translation system. Respond in a clean, formatted layout with English and Spanish translations, and a brief description of the instruction."
+          prompt: `Translate the following Arabic OEM manual text to English and Spanish. Page label: "${selectedSign.label}". Arabic text: "${selectedSign.arabicText}". Explain the safety or maintenance implications.`,
+          systemInstruction: "You are StadiumMind PS8 Doc OCR Translation system. Respond in a clean, formatted layout with English and Spanish translations, and a brief description of the technical instructions."
         })
       });
       const data = await response.json();
@@ -402,7 +400,7 @@ export const BroadcastCenter = () => {
                 required
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="e.g. Gate B congestion rerouted to Gate C walkway..."
+                placeholder="e.g. Compressor C-204 bearing vibration high, dispatch technician..."
                 rows={4}
                 className="w-full bg-void-950 border border-void-600/40 rounded-xl px-4 py-3 text-xs text-white placeholder:text-void-600 focus:outline-none focus:border-neon-purple-500 transition-colors resize-none"
               />
@@ -516,7 +514,7 @@ export const AuditLogs = () => {
           <Terminal className="w-5 h-5 text-neon-cyan-400 animate-pulse" />
           <div>
             <h3 className="font-display font-bold text-base text-white tracking-tight uppercase">Immutable Event Ledger</h3>
-            <div className="text-[9px] text-neon-cyan-500 font-bold uppercase mt-0.5 tracking-wider">stadium_audit_core v4.0</div>
+            <div className="text-[9px] text-neon-cyan-500 font-bold uppercase mt-0.5 tracking-wider">plant_audit_ledger v2.0</div>
           </div>
         </div>
 
@@ -587,8 +585,8 @@ export const CrowdAnalytics = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: `Analyze the following stadium gates telemetry and write a short strategic ingress forecast and 2 tactical recommendations: \n${gateDetails}`,
-          systemInstruction: "You are StadiumMind Predictive Crowd Analytics Engine. Formulate a short, futuristic ingress forecast with 2 specific recommendations. Use markdown lists and headings (### / ####)."
+          prompt: `Analyze the following plant inlets telemetry and write a short strategic inflow forecast and 2 recommendations: \n${gateDetails}`,
+          systemInstruction: "You are StadiumMind PS8 Predictive Inflow Analytics Engine. Formulate a short, futuristic inflow forecast with 2 specific recommendations. Use markdown lists and headings (### / ####)."
         })
       });
       const data = await response.json();
@@ -613,7 +611,7 @@ export const CrowdAnalytics = () => {
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
             <Users className="w-5 h-5 text-neon-blue-400" />
-            <h3 className="font-display font-bold text-lg text-white">Ingress Flow Analytics</h3>
+            <h3 className="font-display font-bold text-lg text-white">Inflow Telemetry Analytics</h3>
           </div>
         </div>
 
@@ -627,7 +625,7 @@ export const CrowdAnalytics = () => {
                 cursor={{ fill: 'rgba(255,255,255,0.02)' }}
                 contentStyle={{ backgroundColor: '#040712', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
               />
-              <Bar dataKey="paxRate" name="Flow (PAX/min)" radius={[4, 4, 0, 0]}>
+              <Bar dataKey="paxRate" name="Inflow Rate (m³/h)" radius={[4, 4, 0, 0]}>
                 {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#0066ff' : '#00f2ff'} />
                 ))}

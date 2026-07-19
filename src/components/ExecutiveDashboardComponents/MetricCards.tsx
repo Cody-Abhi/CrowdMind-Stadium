@@ -60,7 +60,7 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
 
   const itemVariants = {
     hidden: { opacity: 0, y: 15 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 350, damping: 26 } }
+    show: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 350, damping: 26 } }
   };
 
   return (
@@ -87,12 +87,12 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
           </span>
         </div>
         
-        <h3 className="text-void-400 text-xs font-mono uppercase tracking-wider">Attendance Matrix</h3>
+        <h3 className="text-void-400 text-xs font-mono uppercase tracking-wider">Plant Flow Rate</h3>
         <div className="mt-1 flex items-baseline gap-2">
           <span className="text-3xl font-display font-extrabold text-white tracking-tight">
             {totalSpectators.toLocaleString()}
           </span>
-          <span className="text-xs text-void-400 font-mono">/ 56,000 capacity</span>
+          <span className="text-xs text-void-400 font-mono">/ 56,000 m³/h capacity</span>
         </div>
 
         <div className="h-12 mt-4 flex items-end gap-1">
@@ -111,11 +111,11 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
 
         <div className="mt-4 pt-4 border-t border-void-600/10 grid grid-cols-2 gap-4 text-xs font-sans">
           <div>
-            <span className="text-void-500 block">Occupancy Rate</span>
+            <span className="text-void-500 block">Operating Load</span>
             <strong className="text-white text-sm font-semibold">{Math.round((totalSpectators / 56000) * 100)}%</strong>
           </div>
           <div>
-            <span className="text-void-500 block">Premium VIPs</span>
+            <span className="text-void-500 block">Monitored Inlets</span>
             <strong className="text-white text-sm font-semibold">1,420 nodes</strong>
           </div>
         </div>
@@ -138,12 +138,12 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
           </span>
         </div>
 
-        <h3 className="text-void-400 text-xs font-mono uppercase tracking-wider">Gross Revenue</h3>
+        <h3 className="text-void-400 text-xs font-mono uppercase tracking-wider">Performance Index</h3>
         <div className="mt-1 flex items-baseline gap-2">
           <span className="text-3xl font-display font-extrabold text-white tracking-tight">
-            ${totalRevenue.toLocaleString()}
+            {Math.round(totalRevenue / 100).toLocaleString()}
           </span>
-          <span className="text-xs text-void-500 font-mono">USD Net</span>
+          <span className="text-xs text-void-500 font-mono">KPI score</span>
         </div>
 
         <div className="mt-6">
@@ -183,12 +183,12 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
 
         <div className="mt-4 pt-4 border-t border-void-600/10 grid grid-cols-2 gap-4 text-xs font-sans">
           <div>
-            <span className="text-void-500 block">Concession Plaza</span>
-            <strong className="text-white text-sm font-semibold">${concessionsRev.toLocaleString()}</strong>
+            <span className="text-void-500 block">Process Efficiency</span>
+            <strong className="text-white text-sm font-semibold">{(concessionsRev / 1000).toFixed(1)}% yield</strong>
           </div>
           <div>
-            <span className="text-void-500 block">Luxury Suites</span>
-            <strong className="text-white text-sm font-semibold">${suitesRev.toLocaleString()}</strong>
+            <span className="text-void-500 block">Steam Recovery</span>
+            <strong className="text-white text-sm font-semibold">{(suitesRev / 1000).toFixed(1)}% rate</strong>
           </div>
         </div>
       </motion.div>
@@ -236,11 +236,11 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
 
         <div className="mt-4 pt-4 border-t border-void-600/10 grid grid-cols-2 gap-4 text-xs font-sans">
           <div>
-            <span className="text-void-500 block">Water Refills Saved</span>
-            <strong className="text-white text-sm font-semibold">{(plasticSaved).toLocaleString()} units</strong>
+            <span className="text-void-500 block">Cooling Efficiency</span>
+            <strong className="text-white text-sm font-semibold">{(plasticSaved / 10).toLocaleString()} kW</strong>
           </div>
           <div>
-            <span className="text-void-500 block">Landfill Diversion</span>
+            <span className="text-void-500 block">Grid Diversion</span>
             <strong className="text-white text-sm font-semibold">{landfillDiversion}%</strong>
           </div>
         </div>
@@ -262,22 +262,22 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
           </span>
         </div>
 
-        <h3 className="text-void-400 text-xs font-mono uppercase tracking-wider">Active Stewards & Volunteers</h3>
+        <h3 className="text-void-400 text-xs font-mono uppercase tracking-wider">Active Technicians & Engineers</h3>
         <div className="mt-1 flex items-baseline gap-2">
           <span className="text-3xl font-display font-extrabold text-white tracking-tight">
-            {activeStewardsCount}
+            {Math.round(activeStewardsCount / 5)}
           </span>
-          <span className="text-xs text-void-400 font-mono">operational nodes</span>
+          <span className="text-xs text-void-400 font-mono">assigned crew</span>
         </div>
 
         <div className="mt-5 space-y-1 bg-void-900/60 p-3 rounded-xl border border-void-600/10 text-xs">
           <div className="flex justify-between text-[11px] mb-1">
-            <span className="text-void-400">Task Dispatch Count:</span>
-            <span className="text-white font-bold font-mono">{stewardTasksCount} tickets</span>
+            <span className="text-void-400">Active Work Orders:</span>
+            <span className="text-white font-bold font-mono">{stewardTasksCount} orders</span>
           </div>
           <div className="flex justify-between text-[11px]">
-            <span className="text-void-400">Steward Happiness Index:</span>
-            <span className="text-state-success-text font-bold font-mono">{stewardHappiness}%</span>
+            <span className="text-void-400">Crew Dispatch Status:</span>
+            <span className="text-state-success-text font-bold font-mono">{stewardHappiness}% nominal</span>
           </div>
         </div>
 
@@ -319,12 +319,12 @@ export const MetricCards: React.FC<MetricCardsProps> = ({
 
         <div className="mt-5 space-y-1 bg-void-900/60 p-3 rounded-xl border border-void-600/10 text-xs">
           <div className="flex justify-between text-[11px] mb-1">
-            <span className="text-void-400">Critical Alerts Solved:</span>
-            <span className="text-state-success-text font-bold font-mono">+{criticalSolved} handled</span>
+            <span className="text-void-400">Critical Alarms Solved:</span>
+            <span className="text-state-success-text font-bold font-mono">+{criticalSolved} logs</span>
           </div>
           <div className="flex justify-between text-[11px]">
-            <span className="text-void-400">Active Gate Bottlenecks:</span>
-            <span className="text-state-danger-text font-bold font-mono">{ingressBottlenecks} node</span>
+            <span className="text-void-400">Active Risk Bottlenecks:</span>
+            <span className="text-state-danger-text font-bold font-mono">{ingressBottlenecks} Sector E</span>
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Sidebar } from './DashboardShellComponents/Sidebar';
 import { Header } from './DashboardShellComponents/Header';
@@ -6,6 +6,7 @@ import { AIPanel } from './DashboardShellComponents/AIPanel';
 import { StadiumMap } from './DashboardShellComponents/StadiumMap';
 import { ExecutiveDashboard } from './ExecutiveDashboard';
 import { useAuth } from '../contexts/AuthContext';
+import { db, collection, query, orderBy, onSnapshot, addDoc } from '../firebase';
 
 const FanDashboard = lazy(() => import('./FanDashboard'));
 const MissionControl = lazy(() => import('./MissionControl'));
@@ -20,6 +21,36 @@ interface DashboardShellProps {
 export const DashboardShell: React.FC<DashboardShellProps> = ({ onBackToLanding }) => {
   const { userProfile, updateUserRole } = useAuth();
   const [activeMenuTab, setActiveMenuTab] = useState('executive');
+  const [broadcastHistory, setBroadcastHistory] = useState<string[]>([]);
+
+  useEffect(() => {
+    const q = query(collection(db, 'safety_broadcasts'), orderBy('timestamp', 'desc'));
+    const unsub = onSnapshot(q, (snap) => {
+      const list: string[] = [];
+      snap.forEach(d => {
+        const data = d.data();
+        if (data && typeof data.text === 'string') {
+          list.push(data.text);
+        }
+      });
+      setBroadcastHistory(list);
+    });
+    return unsub;
+  }, []);
+
+  const handleAddStewardTask = async (task: { title: string; zone: string; urgency: string }) => {
+    try {
+      await addDoc(collection(db, 'volunteer_tasks'), {
+        title: task.title,
+        location: task.zone,
+        urgency: task.urgency,
+        status: 'pending',
+        createdAt: new Date().toISOString()
+      });
+    } catch (err) {
+      console.error("Error adding steward task:", err);
+    }
+  };
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
@@ -92,7 +123,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ onBackToLanding 
   const renderActivePanel = () => {
     switch (activeMenuTab) {
       case 'executive': return <ExecutiveDashboard simulationActive={simulationActive} />;
-      case 'fan-hub': return <Suspense fallback={<PanelSkeleton />}><FanDashboard /></Suspense>;
+      case 'fan-hub': return <Suspense fallback={<PanelSkeleton />}><FanDashboard onAddStewardTask={handleAddStewardTask} broadcastHistory={broadcastHistory} /></Suspense>;
       case 'overview': return (
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 h-full min-h-[700px]">
            <div className="xl:col-span-2">
@@ -114,7 +145,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ onBackToLanding 
   };
 
   return (
-    <div className="flex h-screen bg-void-950 text-void-50 overflow-hidden font-sans selection:bg-neon-blue-500/30">
+    <div className="flex h-screen bg-void-950 text-void-50 overflow-hidden font-sans selection:bg-neon-blue-500/30" role="application" aria-label="CrowdMind Stadium Operations Dashboard">
       <Sidebar 
         isSidebarCollapsed={isSidebarCollapsed}
         setIsSidebarCollapsed={setIsSidebarCollapsed}
@@ -138,9 +169,9 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ onBackToLanding 
           onBackToLanding={onBackToLanding}
         />
 
-        <main className="flex-grow overflow-y-auto p-6 lg:p-8 custom-scrollbar bg-void-950 relative">
+        <main className="flex-grow overflow-y-auto p-6 lg:p-8 custom-scrollbar bg-void-950 relative" role="main" aria-label="Dashboard content area">
           {/* Subtle Ambient Glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-neon-blue-500/[0.03] blur-[120px] pointer-events-none" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-neon-blue-500/[0.03] blur-[120px] pointer-events-none" aria-hidden="true" />
           
           <div className="max-w-[1600px] mx-auto h-full relative z-10">
             {renderActivePanel()}
@@ -162,7 +193,7 @@ export const DashboardShell: React.FC<DashboardShellProps> = ({ onBackToLanding 
 };
 
 const PanelSkeleton = () => (
-  <div className="w-full h-full animate-pulse space-y-6">
+  <div className="w-full h-full animate-pulse space-y-6" role="status" aria-label="Loading dashboard panel">
     <div className="h-12 bg-white/5 rounded-2xl w-1/4" />
     <div className="grid grid-cols-3 gap-6">
       <div className="h-48 bg-white/5 rounded-2xl" />

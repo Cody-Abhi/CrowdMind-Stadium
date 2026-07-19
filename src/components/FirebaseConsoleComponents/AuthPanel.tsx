@@ -11,7 +11,7 @@ interface AuthPanelProps {
   setAuthPassword: (val: string) => void;
   authName: string;
   setAuthName: (val: string) => void;
-  authRole: 'fan' | 'volunteer' | 'ops' | 'admin';
+  authRole: 'admin' | 'engineer' | 'technician' | 'auditor';
   setAuthRole: (val: any) => void;
   isRegisterMode: boolean;
   setIsRegisterMode: (val: boolean) => void;
@@ -134,7 +134,7 @@ export const AuthPanel: React.FC<AuthPanelProps> = ({
             <div className="space-y-2">
               <span className="text-[9px] font-mono font-bold text-void-600 uppercase tracking-widest px-1">Designated Role</span>
               <div className="flex gap-1 bg-void-950 p-1 rounded-lg border border-void-800">
-                {(['fan', 'volunteer', 'ops', 'admin'] as const).map((r) => (
+                {(['admin', 'engineer', 'technician', 'auditor'] as const).map((r) => (
                   <button
                     key={r}
                     type="button"

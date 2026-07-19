@@ -26,15 +26,15 @@ interface SidebarProps {
 }
 
 const menuItems = [
-  { id: 'executive', label: 'Executive Board', icon: BarChart3, description: 'C-Suite intelligence' },
-  { id: 'firebase', label: 'Firebase Cloud', icon: Flame, description: 'Spatial database' },
-  { id: 'fan-hub', label: 'Fan Experience', icon: Sparkles, description: 'Premium Spectator' },
-  { id: 'overview', label: 'Mission Control', icon: Activity, description: 'Operational State' },
-  { id: 'crowds', label: 'Ingress Engine', icon: Users, description: 'Bottleneck Analytics' },
-  { id: 'volunteers', label: 'Steward Board', icon: ClipboardList, description: 'Service Dispatch' },
-  { id: 'translations', label: 'Signage AI', icon: Languages, description: 'Linguistic Models' },
-  { id: 'broadcast', label: 'Safety Beacon', icon: Megaphone, description: 'Localized Alerts' },
-  { id: 'logs', label: 'Audit Terminal', icon: Terminal, description: 'Secured Event Logs' },
+  { id: 'executive', label: 'Executive Analytics', icon: BarChart3, description: 'Plant efficiency KPIs' },
+  { id: 'firebase', label: 'Knowledge Ingestion', icon: Flame, description: 'Upload & index docs' },
+  { id: 'fan-hub', label: 'Ask Copilot', icon: Sparkles, description: 'AI semantic RAG' },
+  { id: 'overview', label: 'Asset Registry', icon: Activity, description: 'Compressor C-204 logs' },
+  { id: 'crowds', label: 'RCA Operations', icon: Users, description: 'Incident Root Cause' },
+  { id: 'volunteers', label: 'Work Orders', icon: ClipboardList, description: 'Maintenance dispatch' },
+  { id: 'translations', label: 'Doc OCR & Translate', icon: Languages, description: 'OEM manual parsing' },
+  { id: 'broadcast', label: 'Safety Beacons', icon: Megaphone, description: 'Safety announcements' },
+  { id: 'logs', label: 'Audit Trail', icon: Terminal, description: 'DPDP compliance logs' },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -71,8 +71,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </div>
               </div>
               <div>
-                <span className="font-display font-bold text-lg tracking-tight text-white leading-none block uppercase">CROWDMIND</span>
-                <span className="text-[10px] text-neon-blue-400 block font-mono font-bold uppercase tracking-[0.2em] mt-1 opacity-80">OS 4.0 ALPHA</span>
+                <span className="font-display font-bold text-lg tracking-tight text-white leading-none block uppercase">CROWDMIND PS8</span>
+                <span className="text-[10px] text-neon-blue-400 block font-mono font-bold uppercase tracking-[0.2em] mt-1 opacity-80">UNIFIED BRAIN</span>
               </div>
             </motion.div>
           ) : (
@@ -170,7 +170,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               </div>
 
               <div className="grid grid-cols-4 gap-1.5 relative z-10">
-                {(['fan', 'ops', 'volunteer', 'admin'] as UserRole[]).map((r) => (
+                {(['admin', 'engineer', 'technician', 'auditor'] as UserRole[]).map((r) => (
                   <button
                     key={r}
                     onClick={() => updateUserRole(r)}
@@ -181,7 +181,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     }`}
                     title={`Switch to ${r}`}
                   >
-                    {r.charAt(0)}
+                    {r.substring(0, 3)}
                   </button>
                 ))}
               </div>

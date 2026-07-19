@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Activity, Bot, Sliders, Languages, ClipboardList, ShieldAlert, Send } from 'lucide-react';
 
 export const LiveSandbox: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'fan' | 'ops' | 'translator' | 'volunteer' | 'admin'>('fan');
+  const [activeTab, setActiveTab] = useState<'copilot' | 'telemetry' | 'translator' | 'work_orders' | 'admin'>('copilot');
   const [chatMessages, setChatMessages] = useState([
-    { sender: 'assistant', text: 'Welcome to Lusail Stadium! I am StadiumMind AI.', timestamp: '12:04 PM' }
+    { sender: 'assistant', text: 'Welcome to Plant Lusail! I am StadiumMind PS8.', timestamp: '12:04 PM' }
   ]);
   const [userQuery, setUserQuery] = useState('');
 
@@ -14,7 +14,7 @@ export const LiveSandbox: React.FC = () => {
     setChatMessages([...chatMessages, { sender: 'user', text: query, timestamp: 'Now' }]);
     setUserQuery('');
     setTimeout(() => {
-      setChatMessages(prev => [...prev, { sender: 'assistant', text: 'Analyzing spatial data... Route to Section 114 is optimized via Gate B.', timestamp: 'Now' }]);
+      setChatMessages(prev => [...prev, { sender: 'assistant', text: 'Searching OEM manuals... C-204 lube oil specifications require ISO VG 32 synthetic fluid.', timestamp: 'Now' }]);
     }, 1000);
   };
 
@@ -42,11 +42,11 @@ export const LiveSandbox: React.FC = () => {
                 <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/40" />
                 <span className="w-2.5 h-2.5 rounded-full bg-green-500/40" />
               </div>
-              <span className="text-[10px] font-mono text-void-500 ml-3">stadium_core_sim.sh</span>
+              <span className="text-[10px] font-mono text-void-500 ml-3">plant_brain_sim.sh</span>
             </div>
 
             <div className="flex items-center gap-1 bg-void-900 p-1 rounded-xl border border-void-600/30">
-              {(['fan', 'ops', 'translator', 'volunteer', 'admin'] as const).map((tab) => (
+              {(['copilot', 'telemetry', 'translator', 'work_orders', 'admin'] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -59,7 +59,7 @@ export const LiveSandbox: React.FC = () => {
           </div>
 
           <div className="min-h-[400px] bg-void-900/50 p-6">
-            {activeTab === 'fan' && (
+            {activeTab === 'copilot' && (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-4 h-[350px] flex flex-col">
                   <div className="flex-grow overflow-y-auto space-y-4 pr-2 custom-scrollbar">
@@ -77,7 +77,7 @@ export const LiveSandbox: React.FC = () => {
                       value={userQuery}
                       onChange={(e) => setUserQuery(e.target.value)}
                       className="flex-grow bg-void-950 border border-void-600/30 rounded-xl px-4 py-2 text-xs text-white focus:outline-none"
-                      placeholder="Ask stadium guide..."
+                      placeholder="Ask plant copilot..."
                     />
                     <button 
                       onClick={() => handleChatSubmit(userQuery)}
@@ -98,7 +98,7 @@ export const LiveSandbox: React.FC = () => {
                 </div>
               </div>
             )}
-            {activeTab !== 'fan' && (
+            {activeTab !== 'copilot' && (
               <div className="flex items-center justify-center h-[350px] text-void-500 font-mono text-xs uppercase tracking-widest">
                 Simulation Module: {activeTab} is currently in restricted mode for demo.
               </div>

@@ -37,10 +37,10 @@ const LIVE_DATA = [
 ];
 
 const SECTOR_DISTRIBUTION = [
-  { name: 'North', val: 22000, color: '#0066ff' },
-  { name: 'South', val: 18500, color: '#3b82f6' },
-  { name: 'East', val: 24000, color: '#00f2ff' },
-  { name: 'West', val: 20000, color: '#8b5cf6' },
+  { name: 'Inlet A', val: 22000, color: '#0066ff' },
+  { name: 'Inlet B', val: 18500, color: '#3b82f6' },
+  { name: 'Inlet C', val: 24000, color: '#00f2ff' },
+  { name: 'Inlet D', val: 20000, color: '#8b5cf6' },
 ];
 
 export const ExecutiveDashboard: React.FC<{ simulationActive: boolean }> = ({ simulationActive }) => {
@@ -101,8 +101,8 @@ export const ExecutiveDashboard: React.FC<{ simulationActive: boolean }> = ({ si
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          prompt: `Compile a strategic briefing for the stadium C-suite. Focus perspective: ${selectedFocus}. Parameters: Spectators: ${sliderAttendance}, Temp: ${sliderTemp}°C, Steward Deployment: ${sliderStewardRatio}%. Simulation Active: ${simulationActive ? "YES" : "NO"}. Present 3 action items and list detailed metrics.`,
-          systemInstruction: "You are StadiumMind C-Suite Analyst. Format response using Markdown headings (### and ####) and lists. Be futuristic, concise, and professional."
+          prompt: `Compile a strategic briefing for perspective ${selectedFocus}. Capacity rate: ${totalSpectators} m3/h. Temperature: ${sliderTemp} C. System pressure: ${sliderStewardRatio} bar.`,
+          systemInstruction: "You are the Plant Lusail C-Suite Briefing Generator. Generate a concise operational report in Markdown format. Focus: ${selectedFocus}."
         })
       });
       const data = await response.json();
@@ -196,7 +196,7 @@ export const ExecutiveDashboard: React.FC<{ simulationActive: boolean }> = ({ si
                 <Area 
                   type="monotone" 
                   dataKey="fans" 
-                  stroke="#0066ff" 
+                  stroke="#00f2ff" 
                   strokeWidth={3}
                   fillOpacity={1} 
                   fill="url(#colorFans)" 
@@ -215,8 +215,8 @@ export const ExecutiveDashboard: React.FC<{ simulationActive: boolean }> = ({ si
           className="glass-card p-8 flex flex-col"
         >
           <div className="mb-8">
-            <h3 className="font-display font-bold text-lg text-white tracking-tight">Sector Load Distribution</h3>
-            <p className="text-[10px] font-mono text-void-500 font-bold uppercase tracking-widest mt-1">Geospatial Capacity Balance</p>
+            <h3 className="font-display font-bold text-lg text-white tracking-tight">Inlet Load Distribution</h3>
+            <p className="text-[10px] font-mono text-void-500 font-bold uppercase tracking-widest mt-1">Inflow Sensor Balance</p>
           </div>
 
           <div className="h-[240px] w-full mb-8">
@@ -293,7 +293,7 @@ export const ExecutiveDashboard: React.FC<{ simulationActive: boolean }> = ({ si
           </div>
           <div>
             <div className="text-[10px] font-mono font-bold text-neon-cyan-500 uppercase tracking-widest mb-1">Neural Prediction</div>
-            <p className="text-sm font-semibold text-void-100 leading-snug">Expected peak load in <span className="text-white">14 minutes</span>. Recommend opening Reserve Gate 4-A for Sector South.</p>
+            <p className="text-sm font-semibold text-void-100 leading-snug">Expected peak pressure in <span className="text-white">14 minutes</span>. Recommend opening auxiliary bypass loop for Inlet B.</p>
           </div>
         </div>
         
@@ -303,7 +303,7 @@ export const ExecutiveDashboard: React.FC<{ simulationActive: boolean }> = ({ si
           </div>
           <div>
             <div className="text-[10px] font-mono font-bold text-neon-purple-500 uppercase tracking-widest mb-1">Operational Health</div>
-            <p className="text-sm font-semibold text-void-100 leading-snug">Hospitality staffing at <span className="text-white">{sliderStewardRatio}% capacity</span>. Mobile vendors deployed to Sector East bottleneck.</p>
+            <p className="text-sm font-semibold text-void-100 leading-snug">Cooling capacity at <span className="text-white">{sliderStewardRatio}% nominal</span>. Secondary radiators active in Sector East.</p>
           </div>
         </div>
       </div>

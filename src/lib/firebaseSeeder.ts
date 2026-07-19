@@ -17,42 +17,42 @@ export async function seedInitialStadiumData() {
       console.log('Seeded remote_config collection.');
     }
 
-    // 2. Seed Stadium Gates
+    // 2. Seed Plant Inflow Inlets
     const gatesSnap = await getDocs(collection(db, 'stadium_gates'));
     if (gatesSnap.empty) {
       const gates = [
-        { id: 'gate-a', name: 'Gate A (North Entrance)', occupancy: 42, waitTime: '4 min', status: 'low', flowRate: '120/min', order: 1 },
-        { id: 'gate-b', name: 'Gate B (East Concourse)', occupancy: 65, waitTime: '9 min', status: 'medium', flowRate: '180/min', order: 2 },
-        { id: 'gate-c', name: 'Gate C (South Main)', occupancy: 35, waitTime: '2 min', status: 'low', flowRate: '85/min', order: 3 },
-        { id: 'gate-d', name: 'Gate D (VIP & Media)', occupancy: 18, waitTime: '1 min', status: 'low', flowRate: '30/min', order: 4 },
+        { id: 'gate-a', name: 'Inlet A (North Pipe)', occupancy: 42, waitTime: '4 min', status: 'low', flowRate: '120/min', order: 1 },
+        { id: 'gate-b', name: 'Inlet B (East Pipe)', occupancy: 65, waitTime: '9 min', status: 'medium', flowRate: '180/min', order: 2 },
+        { id: 'gate-c', name: 'Inlet C (South Pipe)', occupancy: 35, waitTime: '2 min', status: 'low', flowRate: '85/min', order: 3 },
+        { id: 'gate-d', name: 'Inlet D (VIP Bypass Pipe)', occupancy: 18, waitTime: '1 min', status: 'low', flowRate: '30/min', order: 4 },
       ];
       for (const gate of gates) {
         await setDoc(doc(db, 'stadium_gates', gate.id), gate);
       }
-      console.log('Seeded stadium_gates collection.');
+      console.log('Seeded stadium_gates (inlets) collection.');
     }
 
-    // 3. Seed Volunteer Tasks
+    // 3. Seed Maintenance Work Orders
     const tasksSnap = await getDocs(collection(db, 'volunteer_tasks'));
     if (tasksSnap.empty) {
       const tasks = [
-        { title: 'Assist visually impaired spectator', location: 'Gate A (North Entrance)', urgency: 'high', status: 'pending', createdAt: new Date().toISOString() },
-        { title: 'Replenish bottled water station', location: 'Section 114 (Concourse Corridor 4)', urgency: 'medium', status: 'pending', createdAt: new Date().toISOString() },
-        { title: 'Resolve ticket scanner delay', location: 'Gate B (East Concourse)', urgency: 'high', status: 'pending', createdAt: new Date().toISOString() },
-        { title: 'Distribute spectator rain ponchos', location: 'Gate C (South Main)', urgency: 'low', status: 'completed', createdAt: new Date().toISOString() },
+        { title: 'Check Compressor C-204 bearing vibration', location: 'Sector E (East Wing)', urgency: 'high', status: 'pending', createdAt: new Date().toISOString() },
+        { title: 'Perform oil flush on Pump P-101', location: 'Sector W (West Wing)', urgency: 'medium', status: 'pending', createdAt: new Date().toISOString() },
+        { title: 'Flush tube bundle on Exchanger E-105', location: 'Sector N (North Wing)', urgency: 'high', status: 'pending', createdAt: new Date().toISOString() },
+        { title: 'Verify pressure gauge calibration on Line L-42', location: 'Sector S (South Wing)', urgency: 'low', status: 'completed', createdAt: new Date().toISOString() },
       ];
       for (const t of tasks) {
         await addDoc(collection(db, 'volunteer_tasks'), t);
       }
-      console.log('Seeded volunteer_tasks collection.');
+      console.log('Seeded volunteer_tasks (work orders) collection.');
     }
 
-    // 4. Seed Safety Broadcasts
+    // 4. Seed Safety Advisory Beacons
     const broadcastSnap = await getDocs(collection(db, 'safety_broadcasts'));
     if (broadcastSnap.empty) {
       const broadcasts = [
-        { text: 'SPECTATOR BRIEFING: Please prepare physical ticketing barcodes prior to Gate arrival.', timestamp: new Date(Date.now() - 3600000).toISOString() },
-        { text: 'WEATHER ADVISORY: Temperatures expected to drop; climate-stadium airflow adjusted.', timestamp: new Date(Date.now() - 7200000).toISOString() }
+        { text: 'CRITICAL ADVISORY: Compressor C-204 bearing temperature high, standby for dispatch.', timestamp: new Date(Date.now() - 3600000).toISOString() },
+        { text: 'COMPLIANCE ALERT: All engineers must review emergency depressurization SOP-11.', timestamp: new Date(Date.now() - 7200000).toISOString() }
       ];
       for (const b of broadcasts) {
         await addDoc(collection(db, 'safety_broadcasts'), b);
@@ -64,9 +64,9 @@ export async function seedInitialStadiumData() {
     const storageSnap = await getDocs(collection(db, 'cloud_storage_metadata'));
     if (storageSnap.empty) {
       const items = [
-        { name: 'gate_b_ingress_flow_cam.mp4', size: '4.2 MB', contentType: 'video/mp4', category: 'Security Logs', uploadedBy: 'Ops System', downloadUrl: '#' },
-        { name: 'stadium_layout_blueprint.pdf', size: '12.8 MB', contentType: 'application/pdf', category: 'Architectural Maps', uploadedBy: 'Facilities Admin', downloadUrl: '#' },
-        { name: 'arabic_ocr_signage_sample_1.png', size: '1.4 MB', contentType: 'image/png', category: 'OCR Models', uploadedBy: 'Volunteer Translation Suite', downloadUrl: '#' }
+        { name: 'c204_compressor_oem_spec.pdf', size: '14.2 MB', contentType: 'application/pdf', category: 'OEM Manuals', uploadedBy: 'Ops System', downloadUrl: '#' },
+        { name: 'plant_layout_blueprint.dwg', size: '12.8 MB', contentType: 'image/vnd.dwg', category: 'P&ID Drawings', uploadedBy: 'Facilities Admin', downloadUrl: '#' },
+        { name: 'emergency_depressurization_sop11.pdf', size: '1.4 MB', contentType: 'application/pdf', category: 'SOP Procedures', uploadedBy: 'Safety Officer', downloadUrl: '#' }
       ];
       for (const item of items) {
         await addDoc(collection(db, 'cloud_storage_metadata'), item);
@@ -74,13 +74,13 @@ export async function seedInitialStadiumData() {
       console.log('Seeded cloud_storage_metadata collection.');
     }
 
-    // 6. Seed Analytics
+    // 6. Seed Analytics Audit
     const analyticsSnap = await getDocs(collection(db, 'analytics_events'));
     if (analyticsSnap.empty) {
       const events = [
-        { eventName: 'user_login', category: 'Authentication', timestamp: new Date(Date.now() - 600000).toISOString(), userEmail: 'admin@lusail.qa' },
-        { eventName: 'ocr_translation_triggered', category: 'OCR Translator', timestamp: new Date(Date.now() - 500000).toISOString(), userEmail: 'steward.02@lusail.qa' },
-        { eventName: 'sustainability_action', category: 'Environment', timestamp: new Date(Date.now() - 400000).toISOString(), userEmail: 'spectator.99@gmail.com' }
+        { eventName: 'user_login', category: 'Authentication', timestamp: new Date(Date.now() - 600000).toISOString(), userEmail: 'engineer@lusail.gov.qa' },
+        { eventName: 'rag_query_triggered', category: 'RAG Operations', timestamp: new Date(Date.now() - 500000).toISOString(), userEmail: 'operator.02@lusail.gov.qa' },
+        { eventName: 'safety_action_inhibit', category: 'Security Rules', timestamp: new Date(Date.now() - 400000).toISOString(), userEmail: 'auditor.99@lusail.gov.qa' }
       ];
       for (const e of events) {
         await addDoc(collection(db, 'analytics_events'), e);
@@ -88,11 +88,11 @@ export async function seedInitialStadiumData() {
       console.log('Seeded analytics_events collection.');
     }
 
-    // 7. Seed Messaging
+    // 7. Seed Messaging Alerts
     const msgsSnap = await getDocs(collection(db, 'messaging_alerts'));
     if (msgsSnap.empty) {
       const msgs = [
-        { text: 'Volunteer alert: Heavy density at gate B, standby for dispatch', urgency: 'high', sentAt: new Date().toISOString() }
+        { text: 'Plant alert: High vibration threshold on C-204, standby for maintenance', urgency: 'high', sentAt: new Date().toISOString() }
       ];
       for (const m of msgs) {
         await addDoc(collection(db, 'messaging_alerts'), m);

@@ -87,7 +87,7 @@ export default function FirebaseConsole() {
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
   const [authName, setAuthName] = useState('');
-  const [authRole, setAuthRole] = useState<'fan' | 'volunteer' | 'ops' | 'admin'>('fan');
+  const [authRole, setAuthRole] = useState<'admin' | 'engineer' | 'technician' | 'auditor'>('technician');
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
 

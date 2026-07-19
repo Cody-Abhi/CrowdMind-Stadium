@@ -16,10 +16,10 @@ export const OperationalStats: React.FC<OperationalStatsProps> = ({
   activeAlerts
 }) => {
   const stats = [
-    { label: "Occupancy", value: totalSpectators.toLocaleString(), sub: "Live Spectators", icon: Users, color: "text-neon-blue-400", trend: "+2.4%" },
-    { label: "Ingress Friction", value: `${waitTime.toFixed(1)}m`, sub: "Avg. Queue Time", icon: Clock, color: "text-neon-cyan-400", trend: "-0.8m" },
-    { label: "Response Squads", value: activeStewards, sub: "Active Stewards", icon: Shield, color: "text-neon-purple-400", trend: "100% Ready" },
-    { label: "Active Alerts", value: activeAlerts, sub: "Critical Incidents", icon: AlertTriangle, color: "text-red-400", trend: "Risk: Elevated" }
+    { label: "Plant Throughput", value: `${totalSpectators.toLocaleString()} m3/h`, sub: "Live Flow Rate", icon: Users, color: "text-neon-blue-400", trend: "+2.4%" },
+    { label: "Vessel Pressure", value: `${(waitTime * 10).toFixed(1)} bar`, sub: "Avg. Sensor Pressure", icon: Clock, color: "text-neon-cyan-400", trend: "Nominal" },
+    { label: "Active Crew", value: Math.round(activeStewards / 5), sub: "Assigned Technicians", icon: Shield, color: "text-neon-purple-400", trend: "100% Active" },
+    { label: "Vibration Alerts", value: activeAlerts, sub: "Critical Anomalies", icon: AlertTriangle, color: "text-red-400", trend: "Risk: Elevated" }
   ];
 
   return (

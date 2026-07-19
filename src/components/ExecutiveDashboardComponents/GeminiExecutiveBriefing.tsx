@@ -20,10 +20,10 @@ export const GeminiExecutiveBriefing: React.FC<GeminiExecutiveBriefingProps> = (
   handleGenerateReport
 }) => {
   const focusOptions = [
-    { id: 'General Operations', label: 'General Operations', desc: 'Holistic stadium capacity and safety assessment.' },
-    { id: 'Revenue & Yield Optimization', label: 'Revenue & Yield', desc: 'Ticketing, suite and concession monetization pathways.' },
-    { id: 'Sustainability & Carbon Milestones', label: 'Sustainability & CO₂', desc: 'Zero-plastic targets, public transport offsets, smart cooling.' },
-    { id: 'Steward Deployment & Volunteer Performance', label: 'Volunteer Efficacy', desc: 'Dispatch SLA tracking, morale indexes, and labor models.' },
+    { id: 'General Operations', label: 'Mechanical Diagnostics', desc: 'Compressor C-204 vibration & telemetry diagnostic check.' },
+    { id: 'Revenue & Yield Optimization', label: 'Plant Productivity', desc: 'Work order backlog and system KPI optimization.' },
+    { id: 'Sustainability & Carbon Milestones', label: 'Thermal & Energy Efficiency', desc: 'Carbon offsets, smart cooling, auxiliary load calculations.' },
+    { id: 'Steward Deployment & Volunteer Performance', label: 'Technician Crew Dispatch', desc: 'Maintenance crew SLAs, response times, and compliance.' },
   ];
 
   return (
@@ -40,7 +40,7 @@ export const GeminiExecutiveBriefing: React.FC<GeminiExecutiveBriefingProps> = (
         </div>
 
         <p className="text-void-400 text-xs mb-5">
-          Select an operations matrix focal perspective to compile a strategic executive briefing on stadium performance.
+          Select an operations matrix focal perspective to compile a strategic executive briefing on plant performance.
         </p>
 
         {/* Focus Options Pills */}

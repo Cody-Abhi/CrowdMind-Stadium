@@ -48,7 +48,7 @@ export const MessagingTab: React.FC<MessagingTabProps> = ({
                   required
                   value={newMessageText}
                   onChange={(e) => setNewMessageText(e.target.value)}
-                  placeholder="e.g. VIP Evacuation Protocol Alpha initiated. All security nodes to Rally Point 4."
+                  placeholder="e.g. High vibration threshold detected on Compressor C-204 bearing. Safety dispatch active."
                   className="w-full bg-void-950/50 border border-void-600/30 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-neon-blue-500 font-sans resize-none placeholder:text-void-600 transition-all"
                 />
               </div>

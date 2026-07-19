@@ -75,9 +75,9 @@ export const StorageTab: React.FC<StorageTabProps> = ({
                     className="w-full bg-void-950/50 border border-void-600/30 rounded-xl px-2 py-3 text-xs text-white focus:outline-none focus:border-neon-cyan-500 font-mono transition-all appearance-none cursor-pointer"
                   >
                     <option value="General Logs">General Logs</option>
-                    <option value="Security Logs">Security Logs</option>
-                    <option value="Architectural Maps">Architectural Maps</option>
-                    <option value="OCR Models">OCR Models</option>
+                    <option value="RAG Ingest Logs">RAG Ingest Logs</option>
+                    <option value="P&ID Blueprints">P&ID Blueprints</option>
+                    <option value="OEM Manuals">OEM Manuals</option>
                   </select>
                 </div>
               </div>

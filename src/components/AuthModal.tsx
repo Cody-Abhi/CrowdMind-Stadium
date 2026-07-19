@@ -80,7 +80,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
         {/* Backdrop overlay */}
         <motion.div 
           initial={{ opacity: 0 }}
@@ -88,6 +88,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           exit={{ opacity: 0 }}
           onClick={onClose}
           className="absolute inset-0 bg-void-950/80 backdrop-blur-md"
+          aria-hidden="true"
         />
 
         {/* Modal body */}
@@ -102,8 +103,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <button 
             onClick={onClose}
             className="absolute top-4 right-4 p-1.5 rounded-lg text-void-400 hover:text-white hover:bg-void-750 transition-colors"
+            aria-label="Close authentication dialog"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
 
           <div className="mb-6 text-center">
@@ -111,7 +113,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <Sparkles className="w-3.5 h-3.5 text-neon-cyan-500" />
               FIFA World Cup 2026 Core Gateway
             </div>
-            <h2 className="font-display font-bold text-white text-2xl tracking-tight">
+            <h2 id="auth-modal-title" className="font-display font-bold text-white text-2xl tracking-tight">
               {isSignUp ? 'Register Security Key' : 'Initiate Secure Session'}
             </h2>
             <p className="text-void-400 text-xs mt-1">
@@ -119,18 +121,20 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             </p>
           </div>
 
-          <form onSubmit={handleAuthSubmit} className="space-y-4">
+          <form onSubmit={handleAuthSubmit} className="space-y-4" noValidate>
             {isSignUp && (
               <div>
-                <label className="block text-[11px] font-mono text-void-300 uppercase tracking-wider mb-1.5">Full Name</label>
+                <label htmlFor="auth-name" className="block text-[11px] font-mono text-void-300 uppercase tracking-wider mb-1.5">Full Name</label>
                 <div className="relative">
                   <User className="absolute left-3.5 top-3 w-4 h-4 text-void-400" />
                   <input
+                    id="auth-name"
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter full name"
+                    autoComplete="name"
                     className="w-full bg-void-900 border border-void-600/40 rounded-xl pl-11 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-neon-blue-500 transition-colors placeholder:text-void-500"
                   />
                 </div>
@@ -138,30 +142,35 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             )}
 
             <div>
-              <label className="block text-[11px] font-mono text-void-300 uppercase tracking-wider mb-1.5">Email Address</label>
+              <label htmlFor="auth-email" className="block text-[11px] font-mono text-void-300 uppercase tracking-wider mb-1.5">Email Address</label>
               <div className="relative">
                 <Mail className="absolute left-3.5 top-3 w-4 h-4 text-void-400" />
                 <input
+                  id="auth-email"
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@domain.com"
+                  autoComplete="email"
                   className="w-full bg-void-900 border border-void-600/40 rounded-xl pl-11 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-neon-blue-500 transition-colors placeholder:text-void-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-void-300 uppercase tracking-wider mb-1.5">Security Password</label>
+              <label htmlFor="auth-password" className="block text-[11px] font-mono text-void-300 uppercase tracking-wider mb-1.5">Security Password</label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-3 w-4 h-4 text-void-400" />
                 <input
+                  id="auth-password"
                   type="password"
                   required
+                  minLength={6}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
+                  autoComplete={isSignUp ? 'new-password' : 'current-password'}
                   className="w-full bg-void-900 border border-void-600/40 rounded-xl pl-11 pr-4 py-2.5 text-xs text-white focus:outline-none focus:border-neon-blue-500 transition-colors placeholder:text-void-500"
                 />
               </div>
@@ -172,7 +181,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <label className="block text-[11px] font-mono text-void-300 uppercase tracking-wider mb-2">
                 Select Platform Security Clearence ({isSignUp ? 'Assigned' : 'Google Preferred'})
               </label>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Select security clearance role">
                 {roles.map((role) => {
                   const RoleIcon = role.icon;
                   const isSelected = selectedRole === role.id;
@@ -182,6 +191,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       type="button"
                       onClick={() => setSelectedRole(role.id)}
                       className={`p-2.5 rounded-xl border text-left transition-all ${isSelected ? 'bg-neon-blue-500/10 border-neon-blue-500 shadow-neon-glow-blue' : 'bg-void-900 border-void-600/30 hover:border-void-600'}`}
+                      role="radio"
+                      aria-checked={isSelected}
+                      aria-label={`${role.label}: ${role.description}`}
                     >
                       <div className="flex items-center gap-2">
                         <RoleIcon className={`w-4 h-4 ${isSelected ? 'text-neon-cyan-400' : 'text-void-400'}`} />
@@ -196,8 +208,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
             {/* Error alerts */}
             {(localError || authError) && (
-              <div className="p-3 rounded-lg bg-state-danger-bg border border-state-danger-text/30 text-[11px] text-state-danger-text flex items-center gap-2 font-mono">
-                <AlertCircle className="w-4 h-4 text-state-danger-text flex-shrink-0" />
+              <div className="p-3 rounded-lg bg-state-danger-bg border border-state-danger-text/30 text-[11px] text-state-danger-text flex items-center gap-2 font-mono" role="alert" aria-live="assertive">
+                <AlertCircle className="w-4 h-4 text-state-danger-text flex-shrink-0" aria-hidden="true" />
                 <span>{localError || authError}</span>
               </div>
             )}

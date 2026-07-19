@@ -52,7 +52,7 @@ export const SpatialRiskHeatmap: React.FC<SpatialRiskHeatmapProps> = ({
       <div className="p-4 border-b border-void-600/10 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Compass className="w-4 h-4 text-neon-blue-400" />
-          <h2 className="font-display font-bold text-sm text-white uppercase tracking-wider">Spatial Risk Heatmap</h2>
+          <h2 className="font-display font-bold text-sm text-white uppercase tracking-wider">Plant Layout Telemetry Heatmap</h2>
         </div>
         <div className="flex gap-2">
           {(["density", "risk", "inflow"] as const).map(l => (
@@ -137,7 +137,7 @@ export const SpatialRiskHeatmap: React.FC<SpatialRiskHeatmapProps> = ({
                 onClick={handleSimulateNewAlert}
                 className="w-full py-2 glass-panel border-neon-cyan-500/30 hover:border-neon-cyan-500 text-neon-cyan-400 font-mono text-[10px] font-bold uppercase tracking-widest transition-all"
               >
-                Trigger Sector Reinforcement
+                Simulate Telemetry Alert
               </button>
             </div>
           </motion.div>

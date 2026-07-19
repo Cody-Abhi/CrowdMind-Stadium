@@ -8,9 +8,9 @@ interface HeroProps {
 
 export const Hero: React.FC<HeroProps> = ({ onLaunchDashboard }) => {
   return (
-    <section id="hero" className="w-full max-w-7xl mx-auto px-6 pt-24 pb-20 flex flex-col lg:flex-row items-center justify-between gap-16 relative">
+    <section id="hero" className="w-full max-w-7xl mx-auto px-6 pt-24 pb-20 flex flex-col lg:flex-row items-center justify-between gap-16 relative" aria-labelledby="hero-heading">
       {/* Decorative Neural Network Background */}
-      <div className="absolute top-0 right-0 w-full h-full pointer-events-none z-0 overflow-hidden opacity-40">
+      <div className="absolute top-0 right-0 w-full h-full pointer-events-none z-0 overflow-hidden opacity-40" aria-hidden="true">
         <div className="absolute top-1/4 right-[-10%] w-[800px] h-[800px] bg-neon-blue-500/10 rounded-full blur-[120px]" />
         <div className="absolute bottom-1/4 left-[-10%] w-[600px] h-[600px] bg-neon-purple-500/10 rounded-full blur-[100px]" />
       </div>
@@ -27,10 +27,11 @@ export const Hero: React.FC<HeroProps> = ({ onLaunchDashboard }) => {
             <span className="w-1 h-1 rounded-full bg-neon-cyan-500 animate-pulse [animation-delay:0.4s]" />
           </div>
           <Sparkles className="w-3.5 h-3.5" />
-          NEURAL STADIUM OS v4.0 PLATFORM
+          UNIFIED ASSET & OPERATIONS BRAIN
         </motion.div>
 
         <motion.h1 
+          id="hero-heading"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
@@ -39,7 +40,7 @@ export const Hero: React.FC<HeroProps> = ({ onLaunchDashboard }) => {
           Engineered for{' '}
           <span className="relative inline-block">
             <span className="relative z-10 bg-gradient-to-r from-neon-blue-400 via-neon-cyan-400 to-neon-purple-400 bg-clip-text text-transparent">
-              Mass Cognitive
+              Unified Asset
             </span>
             <motion.span 
               initial={{ width: 0 }}
@@ -48,7 +49,7 @@ export const Hero: React.FC<HeroProps> = ({ onLaunchDashboard }) => {
               className="absolute bottom-4 left-0 h-[2px] bg-gradient-to-r from-neon-blue-500/40 via-neon-cyan-500/40 to-transparent" 
             />
           </span>{' '}
-          Flow.
+          Operations.
         </motion.h1>
 
         <motion.p 
@@ -57,7 +58,7 @@ export const Hero: React.FC<HeroProps> = ({ onLaunchDashboard }) => {
           transition={{ delay: 0.2, duration: 0.8 }}
           className="text-void-200 text-xl mb-10 leading-relaxed max-w-2xl font-medium opacity-80"
         >
-          Transform massive physical venues into intelligent, reactive organisms. CrowdMind integrates generative spatial inference with millisecond-latency crowd metrics.
+          Transform complex industrial plant files into intelligent, structured RAG answers. CROWDMIND PS8 integrates generative asset inference with millisecond-latency query metrics.
         </motion.p>
 
         <motion.div 
@@ -71,7 +72,7 @@ export const Hero: React.FC<HeroProps> = ({ onLaunchDashboard }) => {
             className="px-8 py-4 rounded-2xl bg-gradient-to-r from-neon-blue-600 to-neon-blue-500 text-white text-sm font-bold tracking-widest uppercase shadow-[0_0_40px_-10px_rgba(0,102,255,0.6)] hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-3 cursor-pointer group"
           >
             Initialize Workspace
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
           </button>
           <a
             href="#sandbox"
@@ -84,10 +85,10 @@ export const Hero: React.FC<HeroProps> = ({ onLaunchDashboard }) => {
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-10 pt-16 border-t border-white/5 mt-20">
           {[
-            { val: "85K+", label: "Node Ingress" },
-            { val: "45+", label: "Lang Models" },
-            { val: "12ms", label: "Latency" },
-            { val: "ISO", label: "Security" }
+            { val: "10K+", label: "Ingested Docs" },
+            { val: "94%", label: "RAG Accuracy" },
+            { val: "<3s", label: "Query Latency" },
+            { val: "27001", label: "ISO Compliance" }
           ].map((stat, i) => (
             <motion.div
               key={i}
@@ -103,7 +104,7 @@ export const Hero: React.FC<HeroProps> = ({ onLaunchDashboard }) => {
       </div>
 
       {/* Visual Component - Abstract Neural Orb */}
-      <div className="flex-1 flex justify-center items-center relative min-h-[500px] w-full max-w-2xl z-20">
+      <div className="flex-1 flex justify-center items-center relative min-h-[500px] w-full max-w-2xl z-20" aria-hidden="true">
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Layered Glows */}
           <div className="absolute w-[450px] h-[450px] bg-neon-blue-600/20 rounded-full blur-[80px] animate-pulse" />

@@ -34,15 +34,15 @@ export const PredictiveModels: React.FC<PredictiveModelsProps> = ({
           <h3 className="font-display font-bold text-lg text-white">Dynamic Predictive Models</h3>
         </div>
         <p className="text-void-400 text-xs leading-relaxed mb-6">
-          Interact with deep stadium parameters to re-simulate ticketing yield, staffing thresholds, and HVAC energy demand instantly.
+          Interact with deep plant parameters to re-simulate mechanical yield, cooling thresholds, and grid energy demand instantly.
         </p>
 
         <div className="space-y-6 bg-void-900 border border-void-600/15 p-5 rounded-xl">
-          {/* Slider 1: Attendance */}
+          {/* Slider 1: Attendance/Capacity */}
           <div>
             <div className="flex justify-between items-center mb-1.5 font-mono text-[10px]">
-              <span className="text-void-300 uppercase tracking-wider">PROJECTED SPECTATORS</span>
-              <span className="text-neon-cyan-400 font-bold text-xs">{(sliderAttendance).toLocaleString()}</span>
+              <span className="text-void-300 uppercase tracking-wider">PROJECTED CAPACITY RATE</span>
+              <span className="text-neon-cyan-400 font-bold text-xs">{(sliderAttendance).toLocaleString()} PAX/hr</span>
             </div>
             <input
               type="range"
@@ -54,16 +54,16 @@ export const PredictiveModels: React.FC<PredictiveModelsProps> = ({
               className="w-full accent-neon-cyan-500 h-1 bg-void-800 rounded-lg cursor-pointer"
             />
             <div className="flex justify-between text-[9px] text-void-500 mt-1 font-mono">
-              <span>10K (Sparse)</span>
-              <span>56K (Full)</span>
-              <span>80K (Overcapacity)</span>
+              <span>10K (Sparse Flow)</span>
+              <span>56K (Full Load)</span>
+              <span>80K (Overload State)</span>
             </div>
           </div>
 
           {/* Slider 2: Temperature */}
           <div>
             <div className="flex justify-between items-center mb-1.5 font-mono text-[10px]">
-              <span className="text-void-300 uppercase tracking-wider">AMBIENT STADIUM TEMPERATURE</span>
+              <span className="text-void-300 uppercase tracking-wider">CORE OPERATING TEMPERATURE</span>
               <span className="text-neon-purple-400 font-bold text-xs">{sliderTemp}°C</span>
             </div>
             <input
@@ -76,17 +76,17 @@ export const PredictiveModels: React.FC<PredictiveModelsProps> = ({
               className="w-full accent-neon-purple-500 h-1 bg-void-800 rounded-lg cursor-pointer"
             />
             <div className="flex justify-between text-[9px] text-void-500 mt-1 font-mono">
-              <span>15°C (Cool)</span>
-              <span>24°C (Normal)</span>
-              <span>45°C (Extreme Desert)</span>
+              <span>15°C (Cooling Active)</span>
+              <span>24°C (Normal Load)</span>
+              <span>45°C (Extreme Temperature)</span>
             </div>
           </div>
 
           {/* Slider 3: Volunteer Steward Ratio */}
           <div>
             <div className="flex justify-between items-center mb-1.5 font-mono text-[10px]">
-              <span className="text-void-300 uppercase tracking-wider">STEWARD DEPLOYMENT DENSITY</span>
-              <span className="text-neon-blue-400 font-bold text-xs">{sliderStewardRatio}%</span>
+              <span className="text-void-300 uppercase tracking-wider">COMPRESSOR STEAM PRESSURE</span>
+              <span className="text-neon-blue-400 font-bold text-xs">{sliderStewardRatio} bar</span>
             </div>
             <input
               type="range"
@@ -98,9 +98,9 @@ export const PredictiveModels: React.FC<PredictiveModelsProps> = ({
               className="w-full accent-neon-blue-500 h-1 bg-void-800 rounded-lg cursor-pointer"
             />
             <div className="flex justify-between text-[9px] text-void-500 mt-1 font-mono">
-              <span>50% (Understaffed)</span>
-              <span>100% (Nominal)</span>
-              <span>150% (Saturated)</span>
+              <span>50 bar (Underpressured)</span>
+              <span>100 bar (Nominal Pressure)</span>
+              <span>150 bar (Critical Pressure)</span>
             </div>
           </div>
         </div>
@@ -110,33 +110,33 @@ export const PredictiveModels: React.FC<PredictiveModelsProps> = ({
           
           <div className="grid grid-cols-2 gap-3.5">
             <div className="p-3 bg-void-900 border border-void-600/10 rounded-xl">
-              <span className="text-[10px] text-void-500 block">EST. REVENUE OUTLOOK</span>
-              <strong className="text-sm font-semibold text-white font-mono">${predictedTotalRevenue.toLocaleString()}</strong>
+              <span className="text-[10px] text-void-500 block">EST. PLANT PERFORMANCE</span>
+              <strong className="text-sm font-semibold text-white font-mono">{(predictedTotalRevenue / 100).toFixed(0)} KPI</strong>
             </div>
             
             <div className="p-3 bg-void-900 border border-void-600/10 rounded-xl">
-              <span className="text-[10px] text-void-500 block">GATE CONGESTION RANGE</span>
+              <span className="text-[10px] text-void-500 block">GRID FAULT COEFFICIENT</span>
               <strong className={`text-sm font-semibold font-mono ${predictedGateCongestion > 75 ? 'text-state-danger-text' : predictedGateCongestion > 45 ? 'text-neon-purple-400' : 'text-state-success-text'}`}>
-                {predictedGateCongestion}%
+                {(predictedGateCongestion / 100).toFixed(2)}
               </strong>
             </div>
 
             <div className="p-3 bg-void-900 border border-void-600/10 rounded-xl">
-              <span className="text-[10px] text-void-500 block">RECOM. STEWARD STAFF</span>
-              <strong className="text-sm font-semibold text-white font-mono">{recommendedStaff} nodes</strong>
+              <span className="text-[10px] text-void-500 block">RECOMMENDED COOLING UNITS</span>
+              <strong className="text-sm font-semibold text-white font-mono">{Math.round(recommendedStaff / 10)} units</strong>
             </div>
 
             <div className="p-3 bg-void-900 border border-void-600/10 rounded-xl">
-              <span className="text-[10px] text-void-500 block">COOLING ENERGETICS LOAD</span>
-              <strong className="text-sm font-semibold text-white font-mono">{predictedCoolingLoad.toLocaleString()} kWh</strong>
+              <span className="text-[10px] text-void-500 block">TOTAL GRID AUX POWER</span>
+              <strong className="text-sm font-semibold text-white font-mono">{predictedCoolingLoad.toLocaleString()} kW</strong>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-6 p-3 bg-void-900/60 rounded-xl border border-void-600/15 text-center text-[10px] font-mono text-void-500 leading-relaxed">
-        AI prediction models trained on 14 preceding world matches.
-      </div>
+  <div className="mt-6 p-3 bg-void-900/60 rounded-xl border border-void-600/15 text-center text-[10px] font-mono text-void-500 leading-relaxed">
+    AI prediction models trained on historical plant log records.
+  </div>
     </div>
   );
 };
