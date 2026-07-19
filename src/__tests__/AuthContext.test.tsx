@@ -3,6 +3,8 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { AuthProvider, useAuth } from '../contexts/AuthContext';
+import { onAuthStateChanged } from '../firebase';
+
 
 // Test component that exposes context values
 function AuthTestConsumer() {
@@ -70,4 +72,36 @@ describe('AuthContext', () => {
       expect(screen.getByTestId('role')).toHaveTextContent('none');
     });
   });
+
+  it('updateUserRole throws error if current user is not an admin', async () => {
+    // Mock onAuthStateChanged to return a logged-in user
+    vi.mocked(onAuthStateChanged).mockImplementationOnce((auth, cb: any) => {
+      cb({ uid: 'test-user-123', email: 'test@example.com' });
+      return vi.fn();
+    });
+
+    // Render the provider to test context interactions
+    let capturedContext: any;
+    function GrabContextConsumer() {
+      capturedContext = useAuth();
+      return null;
+    }
+
+    render(
+      <AuthProvider>
+        <GrabContextConsumer />
+      </AuthProvider>
+    );
+
+    await waitFor(() => {
+      expect(capturedContext).toBeDefined();
+    });
+
+    // Try to update role - should fail because profile role is not 'admin' (it will be 'fan' or undefined by default mock)
+    await expect(capturedContext.updateUserRole('engineer')).rejects.toThrow(
+      'Permission denied: only administrators can change user roles.'
+    );
+  });
 });
+
+
